@@ -1,5 +1,5 @@
 import { LedMatrixInstance } from "rpi-led-matrix";
-import Scene from './scene';
+import Scene from './scenes/Scene';
 
 class Manager {
   constructor({ matrix, scene }: { matrix: LedMatrixInstance, scene: Scene }) {
