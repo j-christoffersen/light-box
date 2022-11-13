@@ -9,6 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "rpi-led-matrix": "^1.14.0"
+    "axios": "^1.1.3",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "rpi-led-matrix": "^1.14.0",
+    "superagent": "^8.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9"
   }
 }
