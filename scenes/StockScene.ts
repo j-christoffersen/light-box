@@ -29,7 +29,7 @@ class StockScene extends Scene {
   async prepare(): Promise<boolean> {
     const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=PYPL&interval=5min&apikey=${AV_API_KEY}`;
     const { data } = await axios.get(url);
-    console.log(data);
+    console.log('>>>>', data);
     this.data = data;
     return true;
   }
@@ -41,6 +41,7 @@ class StockScene extends Scene {
     const currentPrice = timeSeries[lastRefreshed]['4. close'];
     matrix.drawText('PYPL', 0, 0);
     matrix.drawText(`$${currentPrice}`, 0, 16);
+    console.log('DBG:', currentPrice, timeSeries.length);
 
     // fill in gaps in time series data
     const date = lastRefreshed.substring(0, 10);
@@ -55,6 +56,7 @@ class StockScene extends Scene {
       fullTimeSeries.push(mostRecent);
     }
     const everything = fullTimeSeries.map(x => x['4. close']);
+    console.log('>>>>>', everything);
     const open = everything[0];
     const high = _.max(everything);
     const low = _.low(everything);
