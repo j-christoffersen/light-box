@@ -87,7 +87,7 @@ class StockScene extends Scene {
     console.log(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`)
     const font = new Font('helvR12', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
     matrix.font(font).fgColor(colors.white);
-    matrix.drawText(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`, 1, 1);
+    matrix.drawText(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))}`, 1, 1);
     console.log('DBG:', currentPrice, !!timeSeries);
 
     // draw the thingy
