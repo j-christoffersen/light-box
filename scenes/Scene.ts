@@ -1,4 +1,4 @@
-import { LedMatrix } from "rpi-led-matrix/dist/types";
+import { LedMatrix, LedMatrixInstance } from "rpi-led-matrix/dist/types";
 
 class Scene {
   started: boolean
@@ -15,7 +15,7 @@ class Scene {
     return true;
   }
 
-  start(matrix: LedMatrix): void {
+  start(matrix: LedMatrixInstance): void {
     this.started = true;
     return;
   }

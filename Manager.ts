@@ -20,6 +20,9 @@ class Manager {
 
     matrix.afterSync((matrixx, dt, t) => {
       if (scene) {
+        if (!scene.started) {
+          scene.start(matrixx);
+        }
         scene.nextFrame(matrixx, dt, t);
       }
       setTimeout(() => matrixx.sync(), 0);

@@ -23,7 +23,7 @@ class StockScene extends Scene {
   data: any;
 
   nextFrame(matrix, dt, t) {
-    Math.floor(t) % 2 === 0 ? matrix.fill(0xf00) : matrix.fill(0x00f);
+    return;
   }
 
   async prepare(): Promise<boolean> {
