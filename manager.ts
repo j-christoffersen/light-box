@@ -6,7 +6,7 @@ class Manager {
   constructor({ matrix }: { matrix: LedMatrixInstance }) {
     const scenes = [Scene, GameOfLifeScene];
     let i = 0;
-    let scene;
+    let scene: Scene;
     const nextScene = () => {
       const SceneClass = scenes[i];
       i = (i + 1) % scenes.length;
@@ -16,7 +16,9 @@ class Manager {
     setInterval(nextScene, 20000);
 
     matrix.afterSync((matrixx, dt, t) => {
-      scene.nextFrame(matrixx, dt, t);
+      if (scene) {
+        scene.nextFrame(matrixx, dt, t);
+      }
       setTimeout(() => matrixx.sync(), 0);
     });
   }
