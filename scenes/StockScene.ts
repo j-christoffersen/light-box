@@ -84,6 +84,7 @@ class StockScene extends Scene {
     // draw the thingy
     for (let x = 0; x < 64; x++) {
       const v = getPValue(getThing(x));
+      console.log('vvvv', v);
       for (let y = 16; y < 32; y++) {
         if (y === p_open) {
           matrix.fgColor(colors.white).setPixel(x, y);
