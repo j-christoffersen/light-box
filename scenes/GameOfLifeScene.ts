@@ -6,7 +6,7 @@ class GameOfLifeScene extends Scene {
 
   constructor() {
     super();
-    this.vals = (new Array(32 * 64)).map(() => Math.random() > 0.4 ? true : false);
+    this.vals = (new Array(32 * 64)).fill(0).map(() => Math.random() > 0.5 ? true : false);
     this.fgColor = 0x9955ff;
   }
 
