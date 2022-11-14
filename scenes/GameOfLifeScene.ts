@@ -6,7 +6,7 @@ class GameOfLifeScene extends Scene {
 
   constructor() {
     super();
-    this.vals = (new Array(32 * 64)).map(() => Math.random() > 0.66 ? true : false);
+    this.vals = (new Array(32 * 64)).map(() => Math.random() > 0.4 ? true : false);
     this.fgColor = 0x9955ff;
   }
 
@@ -15,7 +15,7 @@ class GameOfLifeScene extends Scene {
   }
 
   nextFrame(matrix: any, dt: any, t: any): void {
-    let newVals = (new Array(32 * 64)).fill(0);
+    let newVals = (new Array(32 * 64)).fill(false);
     for (let x = 0; x < 64; x++) {
       for (let y = 0; y < 32; y++) {
         let neighbors = 0;
@@ -29,12 +29,12 @@ class GameOfLifeScene extends Scene {
           }
         }
         if ((this.valueAt(x, y) && neighbors === 2) || neighbors === 3) {
-          newVals[64 * y + x] = 1;
+          newVals[64 * y + x] = true;
         }
       }
     }
     this.vals = newVals;
-    console.log('??', newVals);
+    console.log('??', newVals, newVals.some(x => x));
 
     for (let x = 0; x < 64; x++) {
       for (let y = 0; y < 32; y++) {
