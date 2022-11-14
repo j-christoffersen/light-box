@@ -7,9 +7,9 @@ import { Font } from 'rpi-led-matrix';
 const { AV_API_KEY } = process.env;
 
 const colors = {
-  white: 0xfff,
-  red: 0xf00,
-  green: 0x0f0,
+  white: 0xffffff,
+  red: 0xff0000,
+  green: 0x00ff00,
 };
 
 const addTo930 = (minutesSince930) => {
@@ -48,8 +48,8 @@ class StockScene extends Scene {
     const currentPrice = timeSeries[lastRefreshed]['4. close'];
     const font = new Font('helvR12', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
     matrix.font(font).fgColor(colors.white);
-    matrix.drawText('PYPL', 0, 0);
-    matrix.drawText(`$${currentPrice}`, 0, 16);
+    matrix.drawText(`PYPL ${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 1, 1);
+    // matrix.drawText(`$${currentPrice}`, 1, 8);
     console.log('DBG:', currentPrice, !!timeSeries);
 
     // fill in gaps in time series data
@@ -71,9 +71,11 @@ class StockScene extends Scene {
     const low = _.min(everything);
 
     const p_low = 31;
-    const p_high = 16;
+    const p_high = 10;
     const getPValue = (v) => Math.round(p_low + (p_high - p_low) * (high - low) * (v -low));
     const p_open = getPValue(open);
+
+    console.log('PPPP', p_high, p_low, p_open);
 
     const getThing = (x) => {
       return Math.round(x * 64 / intervalsSince930);
