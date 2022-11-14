@@ -1,9 +1,7 @@
 
 import _ from 'lodash';
-import axios, * as what from 'axios';
+import axios from 'axios';
 import Scene from './Scene';
-
-console.log('????', axios, what)
 
 const { AV_API_KEY } = process.env;
 
