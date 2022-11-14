@@ -72,19 +72,19 @@ class StockScene extends Scene {
 
     const p_low = 31;
     const p_high = 10;
-    const getPValue = (v) => Math.round(p_low + (p_high - p_low) * (high - low) * (v -low));
+    const getPValue = (v) => Math.round(p_low + (p_high - p_low) / (high - low) * (v - low));
     const p_open = getPValue(open);
 
-    console.log('PPPP', p_high, p_low, p_open);
-
-    const getThing = (x) => {
-      return Math.round(x * 64 / intervalsSince930);
-    }
+    console.log('PPPP', { p_high, p_low, p_open, high, low, open });
+    
+    const getThingIndex = (x) => {
+        return Math.round(x * 64 / intervalsSince930);
+      }
 
     // draw the thingy
     for (let x = 0; x < 64; x++) {
-      const v = getPValue(getThing(x));
-      console.log('vvvv', v);
+      const v = getPValue(everything[getThingIndex(x)]);
+      console.log('vvvv',getThingIndex(x), everything[getThingIndex(x)], v);
       for (let y = 16; y < 32; y++) {
         if (y === p_open) {
           matrix.fgColor(colors.white).setPixel(x, y);
