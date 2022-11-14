@@ -82,12 +82,16 @@ class StockScene extends Scene {
     // draw text
     const gain = currentPrice - open;
     const gainPercent = gain / open;
-    const format = (s, d = 2) => s.toLocaleString('en-US', { minimumFractionDigits: d });
+    const format = (s, d = 2) => s.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
     const sign = gain < 0 ? '-' : '+';
     console.log(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`)
-    const font = new Font('5x8', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
+    const font = new Font('4x6', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
     matrix.font(font).fgColor(colors.white);
-    matrix.drawText(`PYPL ${format(currentPrice)}`, 1, 1);
+    matrix.drawText(`PYPL`, 1, 1);
+    matrix.drawText(`$${format(currentPrice)}`, 1, 8);
+    matrix.drawText(`${sign}$${format(Math.abs(gain))}`, 33, 1);
+    matrix.drawText(`${sign}${format(gainPercent * 100)}%`, 33, 8);
+
     console.log('DBG:', currentPrice, !!timeSeries);
 
     // draw the thingy
@@ -95,15 +99,13 @@ class StockScene extends Scene {
       const v = getPValue(everything[getThingIndex(x)]);
       console.log('vvvv',getThingIndex(x), everything[getThingIndex(x)], v);
       for (let y = 16; y < 32; y++) {
-        if (y === p_open) {
-          matrix.fgColor(colors.white).setPixel(x, y);
-        } else if (y === v) {
+        if (y === v) {
           if (v < open) {
             matrix.fgColor(colors.green).setPixel(x, y);
           } else {
             matrix.fgColor(colors.red).setPixel(x, y);
           }
-        } else if (y > open && y < v) {
+        } else if (y >= open && y < v) {
           matrix.fgColor(colors.lightRed).setPixel(x, y);
         } else if (y < open && y > v) {
           matrix.fgColor(colors.lightGreen).setPixel(x, y);
