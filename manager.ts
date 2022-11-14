@@ -16,7 +16,9 @@ class Manager {
     setInterval(nextScene, 20000);
 
     matrix.afterSync((matrixx, dt, t) => {
+      console.log('> after sync')
       if (scene) {
+        console.log('>> nextframe')
         scene.nextFrame(matrixx, dt, t);
       }
       setTimeout(() => matrixx.sync(), 0);
