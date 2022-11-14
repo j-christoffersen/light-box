@@ -9,4 +9,4 @@ const matrix = new LedMatrix(
 console.log('the heck');
 
 const manager = new Manager({ matrix });
-
+console.log('huh');

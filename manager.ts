@@ -4,6 +4,7 @@ import Scene from './scenes/Scene';
 
 class Manager {
   constructor({ matrix }: { matrix: LedMatrixInstance }) {
+    console.log('hmmmmm');
     const scenes = [Scene, GameOfLifeScene];
     let i = 0;
     let scene: Scene;
