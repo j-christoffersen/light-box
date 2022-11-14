@@ -50,7 +50,7 @@ class StockScene extends Scene {
     matrix.font(font).fgColor(colors.white);
     matrix.drawText('PYPL', 0, 0);
     matrix.drawText(`$${currentPrice}`, 0, 16);
-    console.log('DBG:', currentPrice, timeSeries.length);
+    console.log('DBG:', currentPrice, !!timeSeries);
 
     // fill in gaps in time series data
     const date = lastRefreshed.substring(0, 10);
@@ -68,7 +68,7 @@ class StockScene extends Scene {
     console.log('>>>>>', everything);
     const open = everything[0];
     const high = _.max(everything);
-    const low = _.low(everything);
+    const low = _.min(everything);
 
     const p_low = 31;
     const p_high = 16;
