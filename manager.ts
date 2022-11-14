@@ -15,6 +15,7 @@ class Manager {
     nextScene();
     setInterval(nextScene, 20000);
 
+    matrix.sync();
     matrix.afterSync((matrixx, dt, t) => {
       console.log('> after sync')
       if (scene) {
