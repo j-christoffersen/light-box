@@ -10,8 +10,8 @@ const colors = {
   white: 0xffffff,
   red: 0xff0000,
   green: 0x00ff00,
-  lightRed: 0x990000,
-  lightGreen: 0x009900,
+  lightRed: 0x330000,
+  lightGreen: 0x003300,
 };
 
 const addTo930 = (minutesSince930) => {
