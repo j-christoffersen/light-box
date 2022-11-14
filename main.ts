@@ -3,8 +3,14 @@ import Manager from './Manager';
 
 console.log('what');
 const matrix = new LedMatrix(
-  LedMatrix.defaultMatrixOptions(), // TODO
-  LedMatrix.defaultRuntimeOptions() // TODO
+  {
+    ...LedMatrix.defaultMatrixOptions(),
+    cols: 64,
+  },
+  {
+    ...LedMatrix.defaultRuntimeOptions(),
+    gpioSlowdown: 2,
+  },
 );
 console.log('the heck');
 

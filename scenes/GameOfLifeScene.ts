@@ -34,6 +34,7 @@ class GameOfLifeScene extends Scene {
       }
     }
     this.vals = newVals;
+    console.log('??', newVals);
 
     for (let x = 0; x < 64; x++) {
       for (let y = 0; y < 32; y++) {
