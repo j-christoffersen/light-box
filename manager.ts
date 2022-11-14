@@ -2,6 +2,8 @@ import { LedMatrixInstance } from "rpi-led-matrix";
 import GameOfLifeScene from "./scenes/GameOfLifeScene";
 import Scene from './scenes/Scene';
 
+console.log('confused...');
+
 class Manager {
   constructor({ matrix }: { matrix: LedMatrixInstance }) {
     console.log('hmmmmm');
