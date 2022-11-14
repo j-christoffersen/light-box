@@ -2,7 +2,7 @@
 class Scene {
   nextFrame(matrix, dt, t) {
     console.log('filling....')
-    Math.floor(t) % 2 === 0 ? matrix.fill(0xf00) : matrix.fill(0x00f);
+    Math.floor(t) % 2 === 0 ? matrix.fgColor(0xf00).fill() : matrix.fgColor(0x00f).fill();
   }
 
   prepare(): boolean | Promise<boolean> {
