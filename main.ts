@@ -1,5 +1,5 @@
 import { LedMatrix } from 'rpi-led-matrix';
-import Manager from './manager';
+import Manager from './Manager';
 
 const matrix = new LedMatrix(
   LedMatrix.defaultMatrixOptions(), // TODO

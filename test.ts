@@ -5,6 +5,8 @@ const matrix = new LedMatrix(
   LedMatrix.defaultRuntimeOptions(),
 );
 
+console.log('starting...');
+
 matrix
   .clear() // clear the display
   .brightness(100) // set the panel brightness to 100%
