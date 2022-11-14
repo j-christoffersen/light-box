@@ -82,7 +82,11 @@ class StockScene extends Scene {
     // draw text
     const gain = currentPrice - open;
     const gainPercent = gain / open;
-    const format = (s, d = 2) => s.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+    const format = (s, d = 2) => {
+      const [dollars, cents = '00'] = s.toString().split('.');
+      let centsString = cents.substring(0, 2);
+      return `${dollars}.${centsString}`;
+    };
     const sign = gain < 0 ? '-' : '+';
     console.log(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`)
     const font = new Font('4x6', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
