@@ -44,6 +44,7 @@ class StockScene extends Scene {
   }
 
   start(matrix): void {
+    this.started = true;
     const interval = '5min';
     const { ['Meta Data']: { ['3. Last Refreshed']: lastRefreshed } } = this.data;
     const timeSeries = this.data[`Time Series (${interval})`];

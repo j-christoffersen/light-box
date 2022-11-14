@@ -2,7 +2,7 @@ import { LedMatrix, LedMatrixInstance } from "rpi-led-matrix/dist/types";
 
 class Scene {
   started: boolean
-  cosntructor() {
+  constructor() {
     this.started = false;
   }
 
