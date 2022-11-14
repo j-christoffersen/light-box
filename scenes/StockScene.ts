@@ -2,8 +2,15 @@
 import _ from 'lodash';
 import axios from 'axios';
 import Scene from './Scene';
+import { Font } from 'rpi-led-matrix';
 
 const { AV_API_KEY } = process.env;
+
+const colors = {
+  white: 0xfff,
+  red: 0xf00,
+  green: 0x0f0,
+};
 
 const addTo930 = (minutesSince930) => {
   const totalMinutes = 30 + minutesSince930;
@@ -39,6 +46,8 @@ class StockScene extends Scene {
     const { ['Meta Data']: { ['3. Last Refreshed']: lastRefreshed } } = this.data;
     const timeSeries = this.data[`Time Series (${interval})`];
     const currentPrice = timeSeries[lastRefreshed]['4. close'];
+    const font = new Font('helvR12', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
+    matrix.font(font).fgColor(colors.white);
     matrix.drawText('PYPL', 0, 0);
     matrix.drawText(`$${currentPrice}`, 0, 16);
     console.log('DBG:', currentPrice, timeSeries.length);
@@ -71,17 +80,16 @@ class StockScene extends Scene {
     }
 
     // draw the thingy
-    const [white, red, green, lightRed, lightGreen] = [0xfff, 0xf00, 0x0f0, 0x900, 0x090];
     for (let x = 0; x < 64; x++) {
       const v = getPValue(getThing(x));
       for (let y = 16; y < 32; y++) {
         if (y === p_open) {
-          matrix.fgColor(white).setPixel(x, y);
+          matrix.fgColor(colors.white).setPixel(x, y);
         } else if (y === v) {
           if (v > open) {
-            matrix.fgColor(green).setPixel(x, y);
+            matrix.fgColor(colors.green).setPixel(x, y);
           } else {
-            matrix.fgColor(red).setPixel(x, y);
+            matrix.fgColor(colors.red).setPixel(x, y);
           }
         } // TODO light colors
       }
