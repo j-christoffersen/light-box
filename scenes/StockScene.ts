@@ -10,6 +10,8 @@ const colors = {
   white: 0xffffff,
   red: 0xff0000,
   green: 0x00ff00,
+  lightRed: 0x990000,
+  lightGreen: 0x009900,
 };
 
 const addTo930 = (minutesSince930) => {
@@ -46,11 +48,6 @@ class StockScene extends Scene {
     const { ['Meta Data']: { ['3. Last Refreshed']: lastRefreshed } } = this.data;
     const timeSeries = this.data[`Time Series (${interval})`];
     const currentPrice = timeSeries[lastRefreshed]['4. close'];
-    const font = new Font('helvR12', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
-    matrix.font(font).fgColor(colors.white);
-    matrix.drawText(`PYPL ${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 1, 1);
-    // matrix.drawText(`$${currentPrice}`, 1, 8);
-    console.log('DBG:', currentPrice, !!timeSeries);
 
     // fill in gaps in time series data
     const date = lastRefreshed.substring(0, 10);
@@ -78,8 +75,19 @@ class StockScene extends Scene {
     console.log('PPPP', { p_high, p_low, p_open, high, low, open });
     
     const getThingIndex = (x) => {
-        return Math.round(x * 64 / intervalsSince930);
-      }
+      return Math.round(x * 64 / intervalsSince930);
+    }
+
+    // draw text
+    const gain = currentPrice - open;
+    const gainPercent = gain / open;
+    const format = (s, d = 2) => s.toLocaleString('en-US', { minimumFractionDigits: d });
+    const sign = gain < 0 ? '-' : '+';
+    console.log(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`)
+    const font = new Font('helvR12', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
+    matrix.font(font).fgColor(colors.white);
+    matrix.drawText(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`, 1, 1);
+    console.log('DBG:', currentPrice, !!timeSeries);
 
     // draw the thingy
     for (let x = 0; x < 64; x++) {
@@ -89,12 +97,16 @@ class StockScene extends Scene {
         if (y === p_open) {
           matrix.fgColor(colors.white).setPixel(x, y);
         } else if (y === v) {
-          if (v > open) {
+          if (v < open) {
             matrix.fgColor(colors.green).setPixel(x, y);
           } else {
             matrix.fgColor(colors.red).setPixel(x, y);
           }
-        } // TODO light colors
+        } else if (y > open && y < v) {
+          matrix.fgColor(colors.lightRed).setPixel(x, y);
+        } else if (y < open && y > v) {
+          matrix.fgColor(colors.lightGreen).setPixel(x, y);
+        }
       }
     }
   }

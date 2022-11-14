@@ -25,10 +25,7 @@ const main = async () => {
   const { ['Meta Data']: { ['3. Last Refreshed']: lastRefreshed } } = data;
   const timeSeries = data[`Time Series (${interval})`];
   const currentPrice = timeSeries[lastRefreshed]['4. close'];
-  // const font = new Font('helvR12', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
-  // matrix.font(font).fgColor(colors.white);
-  // matrix.drawText(`PYPL ${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 1, 1);
-  // matrix.drawText(`$${currentPrice}`, 1, 8);
+  
   console.log('DBG:', currentPrice, !!timeSeries);
 
   // fill in gaps in time series data
@@ -59,6 +56,16 @@ const main = async () => {
   const getThingIndex = (x) => {
     return Math.round(x * 64 / intervalsSince930);
   }
+
+  const gain = currentPrice - open;
+  const gainPercent = gain / open;
+  const format = (s, d = 2) => s.toLocaleString('en-US', { minimumFractionDigits: d });
+  const sign = gain < 0 ? '-' : '+';
+  console.log(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`)
+  // const font = new Font('helvR12', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x8.bdf`);
+  // matrix.font(font).fgColor(colors.white);
+  // matrix.drawText(`PYPL ${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 1, 1);
+  // matrix.drawText(`$${currentPrice}`, 1, 8);
 
   // draw the thingy
   for (let x = 0; x < 64; x++) {
