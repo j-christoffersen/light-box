@@ -10,10 +10,12 @@ class Manager {
     const scenes = [StockScene, GameOfLifeScene, Scene];
     let i = 0;
     let scene: Scene;
-    const nextScene = () => {
+    const nextScene = async () => {
       const SceneClass = scenes[i];
+      const newScene = new SceneClass();
+      await newScene.prepare();
       i = (i + 1) % scenes.length;
-      scene = new SceneClass();
+      scene = newScene;
     };
     nextScene();
     setInterval(nextScene, 20000);
