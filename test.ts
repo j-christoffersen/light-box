@@ -1,11 +1,5 @@
 import { LedMatrix } from 'rpi-led-matrix';
 
-console.log(
-  '>>>',
-  LedMatrix,
-  Object.keys(LedMatrix),
-);
-
 const matrix = new LedMatrix(
   LedMatrix.defaultMatrixOptions(),
   LedMatrix.defaultRuntimeOptions(),
@@ -32,3 +26,5 @@ matrix
   .drawLine(0, 0, matrix.width(), matrix.height())
   .drawLine(matrix.width() - 1, 0, 0, matrix.height() - 1)
   .sync();
+
+  setTimeout(() => { console.log('done!'); }, 30000);
