@@ -1,7 +1,6 @@
 import { LedMatrix } from 'rpi-led-matrix';
 import Manager from './Manager';
 
-console.log('what');
 const matrix = new LedMatrix(
   {
     ...LedMatrix.defaultMatrixOptions(),
@@ -12,7 +11,5 @@ const matrix = new LedMatrix(
     gpioSlowdown: 2,
   },
 );
-console.log('the heck');
 
-const manager = new Manager({ matrix });
-console.log('huh');
+new Manager({ matrix });
