@@ -37,7 +37,7 @@ class StockScene extends Scene {
   start(matrix): void {
     const interval = '5min';
     const { ['Meta Data']: { ['3. Last Refreshed']: lastRefreshed } } = this.data;
-    const timeSeries = this.data[`Time Series(${interval})`];
+    const timeSeries = this.data[`Time Series (${interval})`];
     const currentPrice = timeSeries[lastRefreshed]['4. close'];
     matrix.drawText('PYPL', 0, 0);
     matrix.drawText(`$${currentPrice}`, 0, 16);
