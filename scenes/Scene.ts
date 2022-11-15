@@ -7,7 +7,7 @@ class Scene {
   }
 
   nextFrame(matrix, dt, t) {
-    Math.floor(t) % 2 === 0 ? matrix.fgColor(0xf00).fill() : matrix.fgColor(0x00f).fill();
+    return;
   }
 
   prepare(): boolean | Promise<boolean> {
