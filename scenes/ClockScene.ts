@@ -75,3 +75,5 @@ class ClockScene extends Scene {
     matrix.drawText(three, 15, 23);
   }
 }
+
+export default ClockScene;
