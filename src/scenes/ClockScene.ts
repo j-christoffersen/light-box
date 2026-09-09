@@ -1,8 +1,7 @@
-import { Font } from 'rpi-led-matrix';
 import Scene from "./Scene";
 
 class ClockScene extends Scene {
-  start(matrix) {
+  async start(matrix) {
     const timeString = (new Date()).toTimeString();
     const [hoursString, minutesString] = timeString.split(':');
     const hoursInt = parseInt(hoursString);
@@ -71,8 +70,8 @@ class ClockScene extends Scene {
     const font = new Font('4x6', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
     matrix.font(font).fgColor(0xffffff);
     matrix.drawText(one, 5, 5);
-    matrix.drawText(two, 10, 14);
-    matrix.drawText(three, 15, 23);
+    matrix.drawText(two, font.width(two), 14);
+    matrix.drawText(three, font.width(three), 23);
   }
 }
 
