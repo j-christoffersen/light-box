@@ -1,3 +1,4 @@
+import { LedMatrixInstance } from 'rpi-led-matrix';
 import Scene from './Scene';
 
 class GameOfLifeScene extends Scene {
@@ -14,7 +15,7 @@ class GameOfLifeScene extends Scene {
     return this.vals[64 * (y % 32) + (x % 64)];
   }
 
-  nextFrame(matrix: any, dt: any, t: any): void {
+  nextFrame(matrix: LedMatrixInstance, dt: any, t: any): void {
     let newVals = (new Array(32 * 64)).fill(false);
     for (let x = 0; x < 64; x++) {
       for (let y = 0; y < 32; y++) {

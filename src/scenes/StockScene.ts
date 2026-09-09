@@ -38,7 +38,6 @@ class StockScene extends Scene {
   async prepare(): Promise<boolean> {
     const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=PYPL&interval=5min&apikey=${AV_API_KEY}`;
     const { data } = await axios.get(url);
-    console.log('>>>>', data);
     this.data = data;
     return true;
   }
@@ -46,6 +45,7 @@ class StockScene extends Scene {
   start(matrix): void {
     this.started = true;
     const interval = '5min';
+    console.log('>>>>', this.data);
     const { ['Meta Data']: { ['3. Last Refreshed']: lastRefreshed } } = this.data;
     const timeSeries = this.data[`Time Series (${interval})`];
     const currentPrice = timeSeries[lastRefreshed]['4. close'];

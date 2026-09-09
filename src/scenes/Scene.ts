@@ -1,4 +1,4 @@
-import { LedMatrix, LedMatrixInstance } from "rpi-led-matrix/dist/types";
+import { LedMatrixInstance } from "rpi-led-matrix";
 
 class Scene {
   started: boolean

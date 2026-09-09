@@ -2,9 +2,14 @@ import { LedMatrixInstance } from "rpi-led-matrix";
 import GameOfLifeScene from "./scenes/GameOfLifeScene";
 import Scene from './scenes/Scene';
 import StockScene from "./scenes/StockScene";
+import ClockScene from "./scenes/ClockScene";
 
 const SCENE_LENGTH_MS = 20000;
-const scenes = [StockScene, GameOfLifeScene, Scene];
+const scenes = [
+  // StockScene, 
+  GameOfLifeScene, 
+  ClockScene,
+];
 
 /**
  * Manages various scenes and syncs with the matrix UI.
@@ -36,10 +41,7 @@ class SceneManager {
         scene.nextFrame(updatedMatrix, dt, t);
       }
       setTimeout(() => updatedMatrix.sync(), 0);
-    });
-
-    console.log('< first sync call');
-    
+    });    
   }
 
   start() {

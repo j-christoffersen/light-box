@@ -28,7 +28,13 @@
         const socket = io();
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
-
+        function parseRgb(rgb) {
+            return [
+                (rgb >> 16) & 0xff,
+                (rgb >> 8) & 0xff,
+                rgb & 0xff
+            ];
+        }
         // Scale factor: Make each simulated LED pixel 10x10 real screen pixels
         const SCALE = 10; 
         canvas.width = 64 * SCALE;
@@ -37,26 +43,26 @@
         socket.on('frame', (matrix) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Calculate radius and center offsets for the circles
-    const radius = (SCALE - 1) / 2;
+            // Calculate radius and center offsets for the circles
+            const radius = (SCALE - 1) / 2;
 
-    for (let y = 0; y < matrix.length; y++) {
-        for (let x = 0; x < matrix[y].length; x++) {
-            const [r, g, b] = matrix[y][x];
-            
-            // Find the center point X and Y for each LED pixel
-            const centerX = (x * SCALE) + (SCALE / 2);
-            const centerY = (y * SCALE) + (SCALE / 2);
-            
-            // Begin drawing the round LED path
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            
-            // Fill with the RGB color
-            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            ctx.fill();
-        }
-    }
+            for (let y = 0; y < matrix.length; y++) {
+                for (let x = 0; x < matrix[y].length; x++) {
+                    const [r, g, b] = parseRgb(matrix[y][x]);
+                    
+                    // Find the center point X and Y for each LED pixel
+                    const centerX = (x * SCALE) + (SCALE / 2);
+                    const centerY = (y * SCALE) + (SCALE / 2);
+                    
+                    // Begin drawing the round LED path
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                    
+                    // Fill with the RGB color
+                    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+                    ctx.fill();
+                }
+            }
         });
     </script>
 </body>

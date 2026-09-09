@@ -4,6 +4,10 @@ import path from 'path';
 import express from 'express';
 import { Server } from 'socket.io';
 import open from 'open';
+import { LedMatrix } from 'rpi-led-matrix';
+
+import { DummyMatrix } from './DummyMatrix';
+import SceneManager from './SceneManager';
 
 const app = express();
 // Serve the UI static file
@@ -14,39 +18,18 @@ app.get('/', (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server);
 
-
-
 // Dimensions
 const WIDTH = 64;
 const HEIGHT = 32;
 
-type RGB = [number, number, number];
-
-// Generate your 2D array data here
-function generateMatrixData() {
-    let matrix: RGB[][] = [];
-    const time = Date.now() * 0.002;
-    
-    for (let y = 0; y < HEIGHT; y++) {
-        let row: RGB[] = [];
-        for (let x = 0; x < WIDTH; x++) {
-            // Example animation math: moving sine wave color pattern
-            let r = Math.floor(Math.sin(x * 0.1 + time) * 127 + 128);
-            let g = Math.floor(Math.cos(y * 0.1 + time) * 127 + 128);
-            let b = Math.floor(Math.sin((x + y) * 0.1 + time) * 127 + 128);
-            
-            row.push([r, g, b]); // Each pixel is an [R, G, B] array
-        }
-        matrix.push(row);
-    }
-    return matrix;
+const emitFrameData = (frameData: number[][]) => {
+    io.emit('frame', frameData);
 }
 
-// Stream data at ~30 frames per second
-setInterval(() => {
-    const frameData = generateMatrixData();
-    io.emit('frame', frameData);
-}, 33);
+const matrix = new DummyMatrix({ cols: WIDTH, rows: HEIGHT}, emitFrameData);
+
+const manager = new SceneManager({ matrix });
+manager.start();
 
 server.listen(3000, () => {
     console.log('Dummy LED Matrix server running at http://localhost:3000');
