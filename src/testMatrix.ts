@@ -1,5 +1,9 @@
 import { LedMatrix } from 'rpi-led-matrix';
 
+/**
+ * Test file to validate LED matrix functionality.
+ */
+
 const matrix = new LedMatrix(
   LedMatrix.defaultMatrixOptions(),
   LedMatrix.defaultRuntimeOptions(),

@@ -1,5 +1,9 @@
 import { LedMatrix } from 'rpi-led-matrix';
-import Manager from './Manager';
+import SceneManager from './SceneManager';
+
+/**
+ * Main entrypoint for running the application on the raspberry pi.
+ */
 
 const matrix = new LedMatrix(
   {
@@ -12,4 +16,5 @@ const matrix = new LedMatrix(
   },
 );
 
-new Manager({ matrix });
+const manager = new SceneManager({ matrix });
+manager.start();

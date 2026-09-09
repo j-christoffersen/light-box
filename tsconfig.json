@@ -2,6 +2,9 @@
   "compilerOptions": {
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*"]
 }

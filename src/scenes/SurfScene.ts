@@ -3,6 +3,7 @@ import Bluebird from 'bluebird';
 import _ from 'lodash';
 import { Font } from 'rpi-led-matrix';
 import Scene from "./Scene";
+import { drawBmp, readFiles } from './utils';
 
 const format = (s, d = 2) => {
   const [dollars, cents = '00'] = s.toString().split('.');
@@ -13,6 +14,15 @@ const format = (s, d = 2) => {
 
 class SurfScene extends Scene {
   data: any
+  bmps: any
+  frame: number
+  ratingKey: string
+
+  constructor() {
+    super();
+    this.frame = 0;
+    this.ratingKey = '';
+  }
 
   async prepare() {
     const endpoints = ['wave', 'rating', 'wind', 'tides'];
@@ -86,7 +96,41 @@ class SurfScene extends Scene {
     matrix.drawText(`${Math.round(speedMph)} MPH ${directionType}`, 32, 8);
     matrix.drawText(`${format(tideHeight, 1)} FT ${tideDirection}`, 32, 15);
 
-    
+    this.bmps = readFiles({
+      wave: `${process.cwd()}/assets/wave.bmp`,
+      '1_poor': `${process.cwd()}/assets/1_poor.bmp`,
+      '2_0_poor': `${process.cwd()}/assets/2_0_poor.bmp`,
+      '2_1_fair': `${process.cwd()}/assets/2_1_fair.bmp`,
+      '3_fair': `${process.cwd()}/assets/3_fair.bmp`,
+      '4_0_fair': `${process.cwd()}/assets/4_0_fair.bmp`,
+      '4_1_good': `${process.cwd()}/assets/4_1_good.bmp`,
+      '5_good': `${process.cwd()}/assets/5_good.bmp`,
+      // TODO fallback
+    });
+
+    drawBmp(matrix, 0, 0, this.bmps.wave);
+
+    const ratingInitialBmps = {
+      'POOR': '1_poor',
+      'POOR_FAIR': '2_0_poor',
+      'FAIR': '3_fair',
+      'FAIR_GOOD': '4_0_fair',
+      'GOOD': '5_poor',
+    };
+
+    drawBmp(matrix, 32, 16, this.bmps[ratingInitialBmps[ratingKey]]);
+    this.frame= 0;
+    this.ratingKey = ratingKey;
+  }
+
+  nextFrame(matrix, dt, t) {
+    if (['POOR_FAIR', 'FAIR_GOOD'].includes(this.ratingKey)) {
+      if (t % 2000 >= 1000 && this.frame === 0) {
+        // frame should be 1
+      } else if (t % 2000 < 1000 && this.frame === 1) {
+        // frame should be 0
+      }
+    }
   }
 }
 

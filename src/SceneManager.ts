@@ -3,11 +3,19 @@ import GameOfLifeScene from "./scenes/GameOfLifeScene";
 import Scene from './scenes/Scene';
 import StockScene from "./scenes/StockScene";
 
-console.log('confused...');
+const SCENE_LENGTH_MS = 20000;
+const scenes = [StockScene, GameOfLifeScene, Scene];
 
-class Manager {
+/**
+ * Manages various scenes and syncs with the matrix UI.
+ */
+
+class SceneManager {
+  private matrix: LedMatrixInstance;
+
   constructor({ matrix }: { matrix: LedMatrixInstance }) {
-    const scenes = [StockScene, GameOfLifeScene, Scene];
+    this.matrix = matrix;
+
     let i = 0;
     let scene: Scene;
     const nextScene = async () => {
@@ -18,22 +26,25 @@ class Manager {
       scene = newScene;
     };
     nextScene();
-    setInterval(nextScene, 20000);
+    setInterval(nextScene, SCENE_LENGTH_MS);
 
-    matrix.afterSync((matrixx, dt, t) => {
+    matrix.afterSync((updatedMatrix, dt, t) => {
       if (scene) {
         if (!scene.started) {
-          scene.start(matrixx);
+          scene.start(updatedMatrix);
         }
-        scene.nextFrame(matrixx, dt, t);
+        scene.nextFrame(updatedMatrix, dt, t);
       }
-      setTimeout(() => matrixx.sync(), 0);
+      setTimeout(() => updatedMatrix.sync(), 0);
     });
 
     console.log('< first sync call');
     
-    matrix.sync();
+  }
+
+  start() {
+    this.matrix.sync();
   }
 }
 
-export default Manager;
+export default SceneManager;
