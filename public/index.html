@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>64x32 Dummy LED Matrix</title>
+    <style>
+        body {
+            background-color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            background-color: #000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            image-rendering: pixelated; /* Keeps the LED edges sharp */
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Scale factor: Make each simulated LED pixel 10x10 real screen pixels
+        const SCALE = 10; 
+        canvas.width = 64 * SCALE;
+        canvas.height = 32 * SCALE;
+
+        socket.on('frame', (matrix) => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Calculate radius and center offsets for the circles
+    const radius = (SCALE - 1) / 2;
+
+    for (let y = 0; y < matrix.length; y++) {
+        for (let x = 0; x < matrix[y].length; x++) {
+            const [r, g, b] = matrix[y][x];
+            
+            // Find the center point X and Y for each LED pixel
+            const centerX = (x * SCALE) + (SCALE / 2);
+            const centerY = (y * SCALE) + (SCALE / 2);
+            
+            // Begin drawing the round LED path
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            
+            // Fill with the RGB color
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fill();
+        }
+    }
+        });
+    </script>
+</body>
+</html>
