@@ -17,7 +17,7 @@ class TextDrawer {
     }
 
     getTextBitmap(text: string) {
-        const basisChar = this.bdf.glyphs[text[0]];
+        const basisChar = this.bdf.getGlyph(text[0]);
         const basisCharHeight = parseInt(basisChar.BBX[1]);
 
         const rows = {}
@@ -27,7 +27,7 @@ class TextDrawer {
 
         let minYOffset = 0;
         for (const char of text) {
-            const glyph = this.bdf.glyphs[char];
+            const glyph = this.bdf.getGlyph(char);
             const glyphWidth = parseInt(glyph.BBX[0]);
             const glyphHeight = parseInt(glyph.BBX[1]);
             const glyphXOffset = parseInt(glyph.BBX[2]); // TODO handle

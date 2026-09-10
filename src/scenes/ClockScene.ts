@@ -1,8 +1,14 @@
 import { TextDrawer } from "../utils/TextDrawer";
-import { parseBdf } from "../utils/parseBdf";
+import { parseBdf, ParsedBdf } from "../utils/parseBdf";
 import {Scene} from "./Scene";
 
 class ClockScene extends Scene {
+  font?: ParsedBdf;
+  async prepare(): Promise<boolean> {
+    this.font = await parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
+    return true;
+  }
+
   async start(matrix) {
     const timeString = (new Date()).toTimeString();
     const [hoursString, minutesString] = timeString.split(':');
@@ -67,12 +73,10 @@ class ClockScene extends Scene {
       }
     }
 
-    const font = await parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
-
     const drawer = new TextDrawer({
       matrix,
       color: 0xffffff,
-      bdf: font,
+      bdf: this.font!,
     });
 
     matrix.clear();
