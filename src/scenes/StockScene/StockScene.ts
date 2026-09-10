@@ -1,8 +1,9 @@
 
 import _ from 'lodash';
-import axios from 'axios';
 import {Scene} from '../Scene';
-import { Font } from 'rpi-led-matrix';
+import { IntradayData, YahooApiClient } from './YahooApiClient';
+import { parseBdf, ParsedBdf } from '../../utils/parseBdf';
+import { TextDrawer } from '../../utils/TextDrawer';
 
 const { AV_API_KEY } = process.env;
 
@@ -29,59 +30,29 @@ const timeToIntervalsSince930 = (s) => {
 }
 
 class StockScene extends Scene {
-  data: any;
+  data?: IntradayData;
+  font?: ParsedBdf;
 
   nextFrame(matrix, dt, t) {
     return;
   }
 
   async prepare(): Promise<boolean> {
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=PYPL&interval=5min&apikey=${AV_API_KEY}`;
-    const { data } = await axios.get(url);
-    this.data = data;
+    const yahooApiClient = new YahooApiClient();
+    this.data = await yahooApiClient.getIntradayData('PYPL');
+    this.font = await parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
     return true;
   }
 
   start(matrix): void {
     this.started = true;
-    const interval = '5min';
-    console.log('>>>>', this.data);
-    const { ['Meta Data']: { ['3. Last Refreshed']: lastRefreshed } } = this.data;
-    const timeSeries = this.data[`Time Series (${interval})`];
-    const currentPrice = timeSeries[lastRefreshed]['4. close'];
-
-    // fill in gaps in time series data
-    const date = lastRefreshed.substring(0, 10);
-    const fullTimeSeries = [] as any[];
-    let mostRecent = Object.values(timeSeries)[Object.values(timeSeries).length]; // start with first TODO closest to open
-    const intervalsSince930 = Math.min(timeToIntervalsSince930(lastRefreshed.substring(11)), timeToIntervalsSince930('16:00'));
-    for (let i = 0; i < intervalsSince930; i++) { // TODO last refreshed
-      const hi = timeSeries[`${date} ${addTo930(i * 5)}`];
-      if (hi) {
-        mostRecent = hi;
-      }
-      fullTimeSeries.push(mostRecent);
-    }
-    const everything = fullTimeSeries.map(x => x['4. close']);
-    console.log('>>>>>', everything);
-    const open = everything[0];
-    const high = _.max(everything);
-    const low = _.min(everything);
-
-    const p_low = 31;
-    const p_high = 10;
-    const getPValue = (v) => Math.round(p_low + (p_high - p_low) / (high - low) * (v - low));
-    const p_open = getPValue(open);
-
-    console.log('PPPP', { p_high, p_low, p_open, high, low, open });
-    
-    const getThingIndex = (x) => {
-      return Math.round(x * 64 / intervalsSince930);
-    }
+    matrix.clear();
 
     // draw text
-    const gain = currentPrice - open;
-    const gainPercent = gain / open;
+    const currentPrice = this.data!.price;
+    const prevClose = this.data!.previousClose;
+    const gain = currentPrice - prevClose;
+    const gainPercent = gain / prevClose;
     const format = (s, d = 2) => {
       const [dollars, cents = '00'] = s.toString().split('.');
       let centsString = cents.substring(0, 2);
@@ -89,30 +60,49 @@ class StockScene extends Scene {
     };
     const sign = gain < 0 ? '-' : '+';
     console.log(`PYPL ${format(currentPrice)} ${sign}$${format(Math.abs(gain))} (${sign}${format(gainPercent * 100)}%)`)
-    const font = new Font('4x6', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
-    matrix.font(font).fgColor(colors.white);
-    matrix.drawText(`PYPL`, 1, 1);
-    matrix.drawText(`$${format(currentPrice)}`, 1, 8);
-    matrix.drawText(`${sign}$${format(Math.abs(gain))}`, 33, 1);
-    matrix.drawText(`${sign}${format(gainPercent * 100)}%`, 33, 8);
 
-    console.log('DBG:', currentPrice, !!timeSeries);
+    const drawer = new TextDrawer({
+      matrix,
+      color: colors.white,
+      bdf: this.font!,
+    });
 
-    // draw the thingy
+    drawer.drawText(`PYPL`, 1, 1);
+    drawer.drawText(`$${format(currentPrice)}`, 1, 8);
+    drawer.drawText(`${sign}$${format(Math.abs(gain))}`, 33, 1);
+    drawer.drawText(`${sign}${format(gainPercent * 100)}%`, 33, 8);
+
+    // 9:30 - 4:00 = 390 minutes
+    // 390 minutes / 64 pixels = 6.09375 minutes per pixel
+    // iterate and get price for each pixel
+    const t0 = this.data!.data[0].timestamp;
+    const pixelData: number[] = [];
+    for (const { timestamp, price } of this.data!.data) {
+      const minutesSince930 = (timestamp - t0) / 60;
+      const pixelIndex = Math.floor(minutesSince930 / 6.09375);
+      pixelData[pixelIndex] = price;
+    }
+
+    // draw the graph
+    const high = _.max(pixelData);
+    const low = _.min(pixelData);
+    console.log('????', pixelData);
     for (let x = 0; x < 64; x++) {
-      const v = getPValue(everything[getThingIndex(x)]);
-      console.log('vvvv',getThingIndex(x), everything[getThingIndex(x)], v);
-      for (let y = 16; y < 32; y++) {
-        if (y === v) {
-          if (v < open) {
-            matrix.fgColor(colors.green).setPixel(x, y);
-          } else {
-            matrix.fgColor(colors.red).setPixel(x, y);
+      if (pixelData[x]) {
+        console.log('drawing pixel', x, pixelData[x]);
+        const v = 31 - Math.ceil((pixelData[x] - low) / (high - low) * 15);
+        for (let y = 16; y < 32; y++) {
+          if (y === v) {
+            if (v < prevClose) {
+              matrix.fgColor(colors.green).setPixel(x, y);
+            } else {
+              matrix.fgColor(colors.red).setPixel(x, y);
+            }
+          } else if (y >= prevClose && y < v) {
+            matrix.fgColor(colors.lightRed).setPixel(x, y);
+          } else if (y < prevClose && y > v) {
+            matrix.fgColor(colors.lightGreen).setPixel(x, y);
           }
-        } else if (y >= open && y < v) {
-          matrix.fgColor(colors.lightRed).setPixel(x, y);
-        } else if (y < open && y > v) {
-          matrix.fgColor(colors.lightGreen).setPixel(x, y);
         }
       }
     }

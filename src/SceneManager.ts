@@ -7,9 +7,9 @@ import { PlasmaScene } from "./scenes/PlasmaScene";
 
 const SCENE_LENGTH_MS = 20000;
 const scenes = [
+  StockScene, 
   PlasmaScene,
   GameOfLifeScene, 
-  StockScene, 
   ClockScene,
 ];
 
@@ -28,7 +28,16 @@ class SceneManager {
     const nextScene = async () => {
       const SceneClass = scenes[i];
       const newScene = new SceneClass();
-      await newScene.prepare();
+
+      try {
+        await newScene.prepare();
+      } catch (error) {
+        console.error(error);
+        // if an error occurs, skip the scene and move on to the next one
+        i = (i + 1) % scenes.length;
+        return nextScene();
+      }
+
       i = (i + 1) % scenes.length;
       scene = newScene;
     };
