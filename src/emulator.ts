@@ -26,7 +26,7 @@ const emitFrameData = (frameData: number[][]) => {
     io.emit('frame', frameData);
 }
 
-const matrix = new DummyMatrix({ cols: WIDTH, rows: HEIGHT}, emitFrameData);
+const matrix = new DummyMatrix({ cols: WIDTH, rows: HEIGHT }, emitFrameData);
 
 const manager = new SceneManager({ matrix });
 manager.start();

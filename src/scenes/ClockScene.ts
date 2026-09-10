@@ -1,6 +1,6 @@
 import { TextDrawer } from "../utils/TextDrawer";
 import { parseBdf } from "../utils/parseBdf";
-import Scene from "./Scene";
+import {Scene} from "./Scene";
 
 class ClockScene extends Scene {
   async start(matrix) {
@@ -82,4 +82,4 @@ class ClockScene extends Scene {
   }
 }
 
-export default ClockScene;
+export { ClockScene };

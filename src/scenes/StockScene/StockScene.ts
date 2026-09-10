@@ -1,7 +1,7 @@
 
 import _ from 'lodash';
 import axios from 'axios';
-import Scene from './Scene';
+import {Scene} from '../Scene';
 import { Font } from 'rpi-led-matrix';
 
 const { AV_API_KEY } = process.env;
@@ -123,4 +123,4 @@ class StockScene extends Scene {
   }
 }
 
-export default StockScene;
+export { StockScene };

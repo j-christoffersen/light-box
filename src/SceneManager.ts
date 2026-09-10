@@ -1,14 +1,16 @@
 import { LedMatrixInstance } from "rpi-led-matrix";
-import GameOfLifeScene from "./scenes/GameOfLifeScene";
-import Scene from './scenes/Scene';
-import StockScene from "./scenes/StockScene";
-import ClockScene from "./scenes/ClockScene";
+import {GameOfLifeScene} from "./scenes/GameOfLifeScene";
+import {Scene} from './scenes/Scene';
+import {StockScene} from "./scenes/StockScene/StockScene";
+import {ClockScene} from "./scenes/ClockScene";
+import { PlasmaScene } from "./scenes/PlasmaScene";
 
 const SCENE_LENGTH_MS = 20000;
 const scenes = [
-  // StockScene, 
-  ClockScene,
+  PlasmaScene,
   GameOfLifeScene, 
+  StockScene, 
+  ClockScene,
 ];
 
 /**

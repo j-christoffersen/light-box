@@ -23,7 +23,7 @@ class DummyMatrix implements LedMatrixInstance {
         cols,
         rows,
     }: Pick<MatrixOptions, 'cols' | 'rows'>, emitFrameData: (matrix: number[][]) => void) {
-        this.matrix = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
+        this.matrix = new Array(rows).fill(0).map(() => new Array(cols).fill(0));
         this.emitFrameData = emitFrameData;
     }
 

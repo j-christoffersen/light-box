@@ -6,7 +6,7 @@ class Scene {
     this.started = false;
   }
 
-  nextFrame(matrix, dt, t) {
+  nextFrame(matrix: LedMatrixInstance, dt: number, t: number): void {
     return;
   }
 
@@ -24,4 +24,4 @@ class Scene {
   }
 }
 
-export default Scene;
+export { Scene };

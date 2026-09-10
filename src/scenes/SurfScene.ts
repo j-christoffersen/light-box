@@ -2,7 +2,7 @@ import axios from 'axios';
 import Bluebird from 'bluebird';
 import _ from 'lodash';
 import { Font } from 'rpi-led-matrix';
-import Scene from "./Scene";
+import {Scene} from "./Scene";
 import { drawBmp, readFiles } from './utils';
 
 const format = (s, d = 2) => {
@@ -134,4 +134,4 @@ class SurfScene extends Scene {
   }
 }
 
-export default SurfScene;
+export { SurfScene };

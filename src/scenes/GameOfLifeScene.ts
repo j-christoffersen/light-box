@@ -1,5 +1,5 @@
 import { LedMatrixInstance } from 'rpi-led-matrix';
-import Scene from './Scene';
+import {Scene} from './Scene';
 
 class GameOfLifeScene extends Scene {
   vals: boolean[];
@@ -44,4 +44,4 @@ class GameOfLifeScene extends Scene {
   }
 }
 
-export default GameOfLifeScene;
+export { GameOfLifeScene };
