@@ -7,8 +7,8 @@ import ClockScene from "./scenes/ClockScene";
 const SCENE_LENGTH_MS = 20000;
 const scenes = [
   // StockScene, 
-  GameOfLifeScene, 
   ClockScene,
+  GameOfLifeScene, 
 ];
 
 /**

@@ -16,7 +16,7 @@ class TextDrawer {
         this.color = color;
     }
 
-    drawText(text: string, x: number, y: number) {
+    getTextBitmap(text: string) {
         const basisChar = this.bdf.glyphs[text[0]];
         const basisCharHeight = parseInt(basisChar.BBX[1]);
 
@@ -51,7 +51,24 @@ class TextDrawer {
             }
         }
 
-        return {rows, minYOffset, basisCharHeight};
+        return { rows, minYOffset, basisCharHeight };
+    }
+
+    drawText(text: string, x: number, y: number) {
+        const { rows, minYOffset, basisCharHeight } = this.getTextBitmap(text);
+        this.matrix.fgColor(this.color);
+        for (let i = 0; i < basisCharHeight - minYOffset; i++) {
+            for (let j = 0; j < rows[i].length; j++) {
+                if (rows[i][j]) {
+                    this.matrix.setPixel(x + j, y + i);
+                }
+            }
+        }
+    }
+
+    width(text: string) {
+        const { rows, minYOffset, basisCharHeight } = this.getTextBitmap(text);
+        return rows[0].length;
     }
 }
 

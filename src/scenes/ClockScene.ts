@@ -1,3 +1,5 @@
+import { TextDrawer } from "../utils/TextDrawer";
+import { parseBdf } from "../utils/parseBdf";
 import Scene from "./Scene";
 
 class ClockScene extends Scene {
@@ -65,13 +67,18 @@ class ClockScene extends Scene {
       }
     }
 
-    console.log([one, two, three].join(' '));
+    const font = await parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
 
-    const font = new Font('4x6', `${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
-    matrix.font(font).fgColor(0xffffff);
-    matrix.drawText(one, 5, 5);
-    matrix.drawText(two, font.width(two), 14);
-    matrix.drawText(three, font.width(three), 23);
+    const drawer = new TextDrawer({
+      matrix,
+      color: 0xffffff,
+      bdf: font,
+    });
+
+    matrix.clear();
+    drawer.drawText(one, 5, 3);
+    drawer.drawText(two, drawer.width(one), 12);
+    drawer.drawText(three, drawer.width(one) + drawer.width(two) - 5, 21);
   }
 }
 
