@@ -9,7 +9,6 @@ class TextDrawer {
     bdf: ParsedBdf;
     matrix: LedMatrixInstance;
     color: number = 0xffffff;
-    kerning: number = 1;
 
     constructor({ bdf, matrix, color }: { bdf: ParsedBdf; matrix: LedMatrixInstance; color: number }) {
         this.bdf = bdf;
@@ -55,8 +54,5 @@ class TextDrawer {
         return {rows, minYOffset, basisCharHeight};
     }
 }
-
-// TODO x offset and kerning
-// TODO reverse y offset
 
 export { TextDrawer };
