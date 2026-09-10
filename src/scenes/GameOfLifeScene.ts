@@ -1,14 +1,17 @@
 import { LedMatrixInstance } from 'rpi-led-matrix';
+import _ from 'lodash';
+
 import {Scene} from './Scene';
 
 class GameOfLifeScene extends Scene {
   vals: boolean[];
   fgColor: number;
+  prevTime: number = 0
 
   constructor() {
     super();
     this.vals = (new Array(32 * 64)).fill(0).map(() => Math.random() > 0.5 ? true : false);
-    this.fgColor = 0x9955ff;
+    this.fgColor = _.sample([0x9955ff, 0x5599ff, 0x99ff55, 0xff5599]);
   }
 
   valueAt(x, y) {
@@ -16,6 +19,11 @@ class GameOfLifeScene extends Scene {
   }
 
   nextFrame(matrix: LedMatrixInstance, dt: any, t: any): void {
+    if (t - this.prevTime < 100) {
+      return;
+    }
+
+    this.prevTime = t;
     let newVals = (new Array(32 * 64)).fill(false);
     for (let x = 0; x < 64; x++) {
       for (let y = 0; y < 32; y++) {
