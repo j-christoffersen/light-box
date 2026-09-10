@@ -35,29 +35,28 @@ class TextDrawer {
             const glyphYOffset = parseInt(glyph.BBX[3]);
 
             if (glyphYOffset < minYOffset) {
+                // columns in new rows should be empty
+                // note: Y corrdiantes reverse so e.g. a -1 offset with height 6 means a 7th row is needed
+                for (let i = basisCharHeight - minYOffset; i < basisCharHeight - glyphYOffset; i++) {
+                    rows[i] = Array(rows[0].length).fill(false);
+                }
                 minYOffset = glyphYOffset;
-                // todo add new rows as needed
             }
 
-            for (let i = 0; i < glyph.BITMAP.length; i++) {
-                const targetRow = (rows[i + glyphYOffset] ??= []);
-
-                console.log("hex is", glyph.BITMAP[i]);
+            for (let i = 0; i < basisCharHeight - minYOffset; i++) {
 
                 // copy bits into target row
                 for (let j = 0; j < glyphWidth; j++) {
-                    targetRow.push(parseInt(glyph.BITMAP[i], 16) & (1 << (7 - j)) ? true : false);
+                    rows[i].push(parseInt(glyph.BITMAP[i + glyphYOffset] ?? 0x00, 16) & (1 << (7 - j)) ? true : false);
                 }
-
-                console.log("row is now",targetRow);
             }
         }
 
-        return rows;
+        return {rows, minYOffset, basisCharHeight};
     }
 }
 
-// TODO new row needs to be filled with false values
-// TODO any rows not in the for loop need to be filled with false values
+// TODO x offset and kerning
+// TODO reverse y offset
 
 export { TextDrawer };

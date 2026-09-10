@@ -13,5 +13,11 @@ parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`).then(font
     
 
 
-    console.log(textDrawer.drawText('Hello', 0, 0));
+    const { rows, minYOffset, basisCharHeight } = textDrawer.drawText('Hello', 0, 0)
+    console.log(rows);
+    for (let i = 0; i < basisCharHeight - minYOffset; i++) {
+        console.log(rows[i].map(cel => cel ? '#' : '.').join(''));
+    }
+
+
 });
