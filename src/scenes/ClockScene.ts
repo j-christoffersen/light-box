@@ -10,7 +10,7 @@ class ClockScene extends Scene {
   }
 
   async start(matrix) {
-    const timeString = (new Date('2026-09-10T12:55:00')).toTimeString();
+    const timeString = (new Date()).toTimeString();
     const [hoursString, minutesString] = timeString.split(':');
     const hoursInt = parseInt(hoursString);
     const minutesInt = parseInt(minutesString);
