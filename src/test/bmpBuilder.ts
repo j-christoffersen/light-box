@@ -13,7 +13,7 @@ parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`).then(font
     
 
 
-    const { rows, minYOffset, basisCharHeight } = textDrawer.getTextBitmap('Hello')
+    const { rows, minYOffset, basisCharHeight } = textDrawer.getTextBitmap('TILL')
     console.log(rows);
     for (let i = 0; i < basisCharHeight - minYOffset; i++) {
         console.log(rows[i].map(cel => cel ? '#' : '.').join(''));

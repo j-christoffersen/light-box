@@ -5,12 +5,12 @@ import {Scene} from "./Scene";
 class ClockScene extends Scene {
   font?: ParsedBdf;
   async prepare(): Promise<boolean> {
-    this.font = await parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/4x6.bdf`);
+    this.font = await parseBdf(`${process.cwd()}/node_modules/rpi-led-matrix/fonts/5x7.bdf`);
     return true;
   }
 
   async start(matrix) {
-    const timeString = (new Date()).toTimeString();
+    const timeString = (new Date('2026-09-10T12:55:00')).toTimeString();
     const [hoursString, minutesString] = timeString.split(':');
     const hoursInt = parseInt(hoursString);
     const minutesInt = parseInt(minutesString);
@@ -53,11 +53,11 @@ class ClockScene extends Scene {
       20: 'TWENTY PAST',
       25: 'TWENTY-FIVE PAST',
       30: 'HALF PAST',
-      35: 'TWENTY-FIVE TIL',
-      40: 'TWENTY TIL',
-      45: 'QUARTER TIL',
-      50: 'TEN TIL',
-      55: 'FIVE TIL',
+      35: 'TWENTY-FIVE TILL',
+      40: 'TWENTY TILL',
+      45: 'QUARTER TILL',
+      50: 'TEN TILL',
+      55: 'FIVE TILL',
     }
 
     let one = '';
@@ -80,9 +80,9 @@ class ClockScene extends Scene {
     });
 
     matrix.clear();
-    drawer.drawText(one, 5, 3);
-    drawer.drawText(two, drawer.width(one), 12);
-    drawer.drawText(three, drawer.width(one) + drawer.width(two) - 5, 21);
+    one && drawer.drawText(one, 2, 1);
+    two && drawer.drawText(two, 2, 9);
+    three && drawer.drawText(three, 2, 17);
   }
 }
 

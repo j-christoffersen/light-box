@@ -1,10 +1,12 @@
+import _ from 'lodash';
 import { LedMatrixInstance } from "rpi-led-matrix";
 import { ParsedBdf } from "./parseBdf";
+
+type TextBitmap = { basisCharHeight: number; minYOffset: number; rows: { [key: number]: boolean[] } }
 
 /**
  * Draws text using a bmp file. Implemented on an as-needed basis, might not work for all chars or fonts.
  */
-
 class TextDrawer {
     bdf: ParsedBdf;
     matrix: LedMatrixInstance;
@@ -16,7 +18,11 @@ class TextDrawer {
         this.color = color;
     }
 
-    getTextBitmap(text: string) {
+    setColor(color: number) {
+        this.color = color;
+    }
+
+    getTextBitmap(text: string): TextBitmap {
         const basisChar = this.bdf.getGlyph(text[0]);
         const basisCharHeight = parseInt(basisChar.BBX[1]);
 
@@ -54,8 +60,39 @@ class TextDrawer {
         return { rows, minYOffset, basisCharHeight };
     }
 
-    drawText(text: string, x: number, y: number) {
-        const { rows, minYOffset, basisCharHeight } = this.getTextBitmap(text);
+    private printBitmap({ basisCharHeight, minYOffset, rows }: TextBitmap) {
+        for (let i = 0; i < basisCharHeight - minYOffset; i++) {
+            console.log(rows[i].map(cel => cel ? '#' : '.').join(''));
+        }    
+    }
+
+    drawText(text: string, x: number, y: number, rekern = true) {
+        let { basisCharHeight, minYOffset, rows } = this.getTextBitmap(text);
+
+        // if specified, redo kerning to be even
+        if (rekern) {
+            const indexesToRemove: number[] = [];
+            let seenSpace = true;
+            const rowValues = Object.values(rows);
+            for (let i = 0; i < rows[0].length; i++) {
+                if (rowValues.every(row => row[i] === false)) {
+                    if (seenSpace) {
+                        indexesToRemove.push(i);
+                    }
+                    seenSpace = true;
+                } else {
+                    seenSpace = false;
+                }
+            }
+
+            const lastIndex = rows[0].length - 1;
+            if (rowValues.every(row => row[lastIndex] === false)) {
+                indexesToRemove.push(lastIndex);
+            }
+
+            rows = _.mapValues(rows, (row) => row.filter((_, i) => !indexesToRemove.includes(i)));
+        }
+
         this.matrix.fgColor(this.color);
         for (let i = 0; i < basisCharHeight - minYOffset; i++) {
             for (let j = 0; j < rows[i].length; j++) {

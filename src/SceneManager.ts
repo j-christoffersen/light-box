@@ -7,10 +7,10 @@ import { PlasmaScene } from "./scenes/PlasmaScene";
 
 const SCENE_LENGTH_MS = 20000;
 const scenes = [
-  StockScene, 
-  PlasmaScene,
-  GameOfLifeScene, 
   ClockScene,
+  GameOfLifeScene, 
+  StockScene('PYPL'), 
+  PlasmaScene,
 ];
 
 /**

@@ -152,7 +152,9 @@ class DummyMatrix implements LedMatrixInstance {
     }
 
     setPixel(x: number, y: number): this {
-        this.matrix[y][x] = this._fgColor;
+        if (this.matrix[y] && this.matrix[y][x] !== undefined) {
+          this.matrix[y][x] = this._fgColor;
+        }
         return this;
     }
 
