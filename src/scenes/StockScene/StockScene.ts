@@ -56,11 +56,11 @@ const StockScene = (symbol: string) => class StockSceneClass extends Scene {
       bdf: this.font!,
     });
 
-    drawer.drawText(symbol, 0, 0);
-    drawer.drawText(`$${format(currentPrice)}`, 0, 8);
+    drawer.drawText(symbol, 0, -1);
+    drawer.drawText(`$${format(currentPrice)}`, 0, 7);
     drawer.setColor(gain < 0 ? colors.darkRed : gain > 0 ? colors.darkGreen : colors.white);
-    drawer.drawText(`${sign}$${format(Math.abs(gain))}`, 32, 0);
-    drawer.drawText(`${sign}${format(gainPercent * 100)}%`, 32, 8);
+    drawer.drawText(`${sign}$${format(Math.abs(gain))}`, 31, -1);
+    drawer.drawText(`${sign}${format(gainPercent * 100)}%`, 31, 7);
 
     // 9:30 - 4:00 = 390 minutes
     // 390 minutes / 64 pixels = 6.09375 minutes per pixel
