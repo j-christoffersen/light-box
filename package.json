@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx src/emulator.ts",
-    "build": "tsup src/main.ts --format esm --clean",
+    "build": "tsc && tsc-esm-fix",
     "start": "node dist/main.js"
   },
   "author": "",
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "tsc-esm-fix": "^3.1.2",
     "tsx": "^4.23.13"
   }
 }
