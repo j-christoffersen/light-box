@@ -9,6 +9,7 @@ const matrix = new LedMatrix(
   {
     ...LedMatrix.defaultMatrixOptions(),
     cols: 64,
+    disableHardwarePulsing: true,
   },
   {
     ...LedMatrix.defaultRuntimeOptions(),
