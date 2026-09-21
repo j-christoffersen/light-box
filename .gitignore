@@ -1,3 +1,7 @@
 node_modules
 keys.txt
 dist
+
+.gradle/
+build/
+out/

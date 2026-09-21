@@ -3,12 +3,12 @@
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "rootDir": "./src",
+    "rootDir": "ts",
     "outDir": "./dist",
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler", /* Allows extensionless imports */
     "allowImportingTsExtensions": false,
   },
-  "include": ["src/**/*"]
+  "include": ["ts/**/*"]
 }

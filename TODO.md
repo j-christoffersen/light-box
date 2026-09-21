@@ -1,0 +1,1 @@
+- should the buffer be overwritten or reallocated every frame?

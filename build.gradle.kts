@@ -1,0 +1,28 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'net.java.dev.jna:jna:5.14.0'
+    implementation 'com.google.guava:guava:33.3.1-jre'
+}
+
+application {
+    // Change to your actual main class once you create it
+    mainClass = 'com.example.lightbox.Main'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.named('run') {
+    // Uncomment if the native library needs a specific search path
+    // jvmArgs += ["-Djna.library.path=/path/to/your/so/files"]
+}
