@@ -42,10 +42,10 @@ class PlasmaScene extends Scene {
 
     nextFrame(matrix, dt, t) {
         for (let x = 0; x < matrix.width(); x++) {
-        for (let y = 0; y < matrix.height(); y++) {
-            const color = this.getPlasmaPixel(x, y, t);
-            matrix.fgColor(color).setPixel(x, y);
-        }
+            for (let y = 0; y < matrix.height(); y++) {
+                const color = this.getPlasmaPixel(x, y, t);
+                matrix.fgColor(color).setPixel(x, y);
+            }
         }
     }
 }

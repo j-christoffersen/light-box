@@ -13,8 +13,7 @@ public class GameOfLifeScene extends Scene {
         int fgColor = palette[ThreadLocalRandom.current().nextInt(palette.length)];
     }
 
-    @Override
-    public void getNextFrame() {
+    public FrameBuffer getNextFrame() {
         boolean[][] nextGrid = new boolean[Constants.HEIGHT][Constants.WIDTH];
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {
