@@ -2,9 +2,9 @@ package dev.jchristoffersen.lightbox.core;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import com.google.common.collect.Iterators;
@@ -22,9 +22,9 @@ class SceneManager {
     private final Iterator<BiFunction<Scene, Scene, Transition>> transitions;
     private final int ticksPerScene;
 
-    private final ExecutorService prepExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> prepFuture;
+    private CompletableFuture<Void> prepFuture;
     private Scene currentScene;
+    private Scene nextScene;
     private int ticks;
 
     SceneManager(Iterable<Supplier<Scene>> scenes, Iterable<BiFunction<Scene, Scene, Transition>> transitions, int ticksPerScene) {
@@ -33,19 +33,24 @@ class SceneManager {
         this.ticksPerScene = ticksPerScene;
     }
 
-    void start() {
+    CompletableFuture<Void> start() {
         Supplier<Scene> sceneSupplier = scenes.next();
         currentScene = sceneSupplier.get();
-        // TODO call prep
+        return CompletableFuture.runAsync(currentScene::prep);
     }
 
     FrameBuffer getNextFrame() {
-        if (ticks++ >= ticksPerScene) {
-            // TODO also handle prep async
-            Supplier<Scene> nextScene = scenes.next();
+        if (prepFuture == null && ticks++ >= ticksPerScene) {
+            Supplier<Scene> nextSceneSupplier = scenes.next();
+            nextScene = nextSceneSupplier.get();
 
-            currentScene = transitions.next().apply(currentScene, nextScene.get());
+            prepFuture = CompletableFuture.runAsync(nextScene::prep);
+        }
+
+        if (prepFuture != null && prepFuture.isDone()) {
+            currentScene = transitions.next().apply(currentScene, nextScene);
             ticks = 0;
+            prepFuture = null;
         }
 
         SceneResult sceneResult = currentScene.getNextFrame();

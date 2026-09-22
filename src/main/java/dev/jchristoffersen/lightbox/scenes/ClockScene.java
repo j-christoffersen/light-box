@@ -2,6 +2,7 @@ package dev.jchristoffersen.lightbox.scenes;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import dev.jchristoffersen.lightbox.constants.Constants;
 import dev.jchristoffersen.lightbox.render.FrameBuffer;
@@ -53,8 +54,10 @@ public class ClockScene extends StaticScene {
 
     private ParsedBdf parsedBdf;
 
-    public void prep() {
-        this.parsedBdf = ParsedBdf.parse("TODO");
+    public CompletableFuture<Void> prep() {
+        return CompletableFuture.runAsync(() -> {
+            this.parsedBdf = ParsedBdf.parse("TODO");
+        });
     }
 
     public FrameBuffer renderOnce() {

@@ -1,6 +1,7 @@
 package dev.jchristoffersen.lightbox.scenes;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 import dev.jchristoffersen.lightbox.constants.Constants;
 import dev.jchristoffersen.lightbox.render.FrameBuffer;
@@ -28,12 +29,14 @@ public class StockScene extends StaticScene {
         this.ticker = ticker;
     }
     
-    public void prep() {
-        // fetch stock info
-        YahooApiClient yahooApiClient = new YahooApiClient();
-        YahooApiClient.IntradayData intradayData = yahooApiClient.getIntradayData(ticker);
-        this.intradayData = intradayData;
-        this.parsedBdf = ParsedBdf.parse("TODO");
+    public CompletableFuture<Void> prep() {
+        return CompletableFuture.runAsync(() -> {
+            // fetch stock info
+            YahooApiClient yahooApiClient = new YahooApiClient();
+            YahooApiClient.IntradayData intradayData = yahooApiClient.getIntradayData(ticker);
+            this.intradayData = intradayData;
+            this.parsedBdf = ParsedBdf.parse("TODO");
+        });
     }
 
     public FrameBuffer renderOnce() {

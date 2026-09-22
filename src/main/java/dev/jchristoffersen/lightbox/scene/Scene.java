@@ -1,7 +1,9 @@
 package dev.jchristoffersen.lightbox.scene;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface Scene {
-    default void prep() {}
+    default CompletableFuture<Void> prep() { return CompletableFuture.completedFuture(null); }
 
     SceneResult getNextFrame();
 }
