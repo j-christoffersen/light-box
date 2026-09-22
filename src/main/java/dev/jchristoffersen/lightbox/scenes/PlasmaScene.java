@@ -32,7 +32,7 @@ public class PlasmaScene implements Scene {
         double v4 = Math.sin(Math.sqrt(Math.pow(x - Constants.WIDTH / 2, 2) + Math.pow(y - Constants.HEIGHT / 2, 2)) * this.alpha[3] - t * this.beta[3]);
 
         double total = v1 + v2 + v3 + v4;
-        
+
         double r = Math.floor(Math.sin(total * Math.PI + this.phase[0]) * 127 + 128);
         double g = Math.floor(Math.cos(total * Math.PI + this.phase[1]) * 127 + 128);
         double b = Math.floor(Math.sin(total * Math.PI + this.phase[2]) * 127 + 128);
@@ -49,6 +49,6 @@ public class PlasmaScene implements Scene {
         }
 
         t++;
-        return frameBuffer;
+        return SceneResult.updated(frameBuffer);
     }
 }

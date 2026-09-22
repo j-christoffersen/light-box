@@ -34,16 +34,16 @@ public class GameOfLifeScene extends Scene {
         }
 
         grid = nextGrid;
-        result = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
+        frameBuffer = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
 
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {
                 if (grid[y][x]) {
-                    result.setPixel(x, y, fgColor);
+                    frameBuffer.setPixel(x, y, fgColor);
                 }
             }
         }
 
-        return result;
+        return SceneResult.updated(frameBuffer);
     }
 }
