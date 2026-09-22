@@ -1,19 +1,24 @@
 package dev.jchristoffersen.lightbox.scenes;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import dev.jchristoffersen.lightbox.constants.Constants;
 import dev.jchristoffersen.lightbox.render.FrameBuffer;
+import dev.jchristoffersen.lightbox.scene.Scene;
 import dev.jchristoffersen.lightbox.scene.StaticScene;
+import dev.jchristoffersen.lightbox.scene.SceneResult;
 
-public class GameOfLifeScene extends Scene {
-    private final boolean[][] grid;
+public class GameOfLifeScene implements Scene {
+    private boolean[][] grid;
+    private final int fgColor;
 
     public GameOfLifeScene() {
-        this.grid = new boolean[Constants.HEIGHT][Constants.WIDTH];
+        grid = new boolean[Constants.HEIGHT][Constants.WIDTH];
         int[] palette = {0x9955ff, 0x5599ff, 0x99ff55, 0xff5599};
-        int fgColor = palette[ThreadLocalRandom.current().nextInt(palette.length)];
+        fgColor = palette[ThreadLocalRandom.current().nextInt(palette.length)];
     }
 
-    public FrameBuffer getNextFrame() {
+    public SceneResult getNextFrame() {
         boolean[][] nextGrid = new boolean[Constants.HEIGHT][Constants.WIDTH];
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {
@@ -34,7 +39,7 @@ public class GameOfLifeScene extends Scene {
         }
 
         grid = nextGrid;
-        frameBuffer = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
+        FrameBuffer frameBuffer = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
 
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {

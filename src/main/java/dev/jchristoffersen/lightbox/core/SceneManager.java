@@ -1,15 +1,25 @@
 package dev.jchristoffersen.lightbox.core;
 
-import com.google.common.collect.Iterables;
-import java.util.Supplier;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+import com.google.common.collect.Iterators;
 
+import dev.jchristoffersen.lightbox.render.FrameBuffer;
+import dev.jchristoffersen.lightbox.scene.Scene;
+import dev.jchristoffersen.lightbox.scene.SceneResult;
+import dev.jchristoffersen.lightbox.scene.Transition;
 
 /**
  * Manages the scenes playlist.
  */
-class SceneManager implements Scene {
-    private final Iterables.cycle<Supplier<Scene>> scenes;
-    private final Iterables.cycle<Supplier<Transition>> transitions;
+class SceneManager {
+    private final Iterator<Supplier<Scene>> scenes;
+    private final Iterator<BiFunction<Scene, Scene, Transition>> transitions;
     private final int ticksPerScene;
 
     private final ExecutorService prepExecutor = Executors.newSingleThreadExecutor();
@@ -17,30 +27,33 @@ class SceneManager implements Scene {
     private Scene currentScene;
     private int ticks;
 
-    SceneManager(Iterables.cycle<Supplier<Scene>> scenes, Iterables.cycle<Supplier<Transition>> transitions, int ticksPerScene) {
-        this.scenes = Objects.requireNonNull(scenes, "scenes");
+    SceneManager(Iterable<Supplier<Scene>> scenes, Iterable<BiFunction<Scene, Scene, Transition>> transitions, int ticksPerScene) {
+        this.scenes = Iterators.cycle(Objects.requireNonNull(scenes, "scenes"));
+        this.transitions = Iterators.cycle(Objects.requireNonNull(transitions, "transitions"));
+        this.ticksPerScene = ticksPerScene;
     }
 
     void start() {
-        currentScene = scenes.get(0);
+        Supplier<Scene> sceneSupplier = scenes.next();
+        currentScene = sceneSupplier.get();
+        // TODO call prep
     }
 
-    Optional<FrameBuffer> getNextFrame() {
+    FrameBuffer getNextFrame() {
         if (ticks++ >= ticksPerScene) {
             // TODO also handle prep async
             Supplier<Scene> nextScene = scenes.next();
 
-            currentScene = transitions.next()(currentScene, nextScene);
+            currentScene = transitions.next().apply(currentScene, nextScene.get());
             ticks = 0;
         }
 
-        SceneResult result = currentScene.getNextFrame();
-        if (result instanceof SceneResult.Done done) {
+        SceneResult sceneResult = currentScene.getNextFrame();
+        if (sceneResult instanceof SceneResult.Done done) {
             currentScene = done.nextScene();
             ticks = 0;
-            return done
         }
 
-        return result
+        return sceneResult.frameBuffer();
     }
 }

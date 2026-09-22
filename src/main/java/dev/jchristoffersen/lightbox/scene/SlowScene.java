@@ -15,11 +15,11 @@ public class SlowScene implements Scene {
         this.rate = rate;
     }
 
-    prep() {
+    public void prep() {
         parent.prep();
     }
 
-    getNextFrame() {
+    public SceneResult getNextFrame() {
         if (count % rate == 0) {
             return parent.getNextFrame();
         }

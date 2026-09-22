@@ -5,3 +5,4 @@ dist
 .gradle/
 build/
 out/
+bin/

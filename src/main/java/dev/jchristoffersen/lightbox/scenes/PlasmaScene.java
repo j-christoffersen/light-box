@@ -2,10 +2,15 @@ package dev.jchristoffersen.lightbox.scenes;
 
 import java.util.Random;
 
+import dev.jchristoffersen.lightbox.constants.Constants;
+import dev.jchristoffersen.lightbox.render.FrameBuffer;
+import dev.jchristoffersen.lightbox.scene.Scene;
+import dev.jchristoffersen.lightbox.scene.SceneResult;
+
 public class PlasmaScene implements Scene {
     private double[] phase;
-    private double[] a;
-    private double[] b;
+    private double[] alpha;
+    private double[] beta;
     private int t;
 
     PlasmaScene() {
@@ -25,7 +30,7 @@ public class PlasmaScene implements Scene {
         }
     }
 
-    private getPlasmaPixel(int x, int y, double t) {
+    private int[] getPlasmaPixel(int x, int y, double t) {
         double v1 = Math.sin(x * this.alpha[0] + t * this.beta[0]);
         double v2 = Math.cos(y * this.alpha[1] - t * this.beta[1]);
         double v3 = Math.sin((x + y) * this.alpha[2] + t * this.beta[2]);
@@ -36,11 +41,11 @@ public class PlasmaScene implements Scene {
         double r = Math.floor(Math.sin(total * Math.PI + this.phase[0]) * 127 + 128);
         double g = Math.floor(Math.cos(total * Math.PI + this.phase[1]) * 127 + 128);
         double b = Math.floor(Math.sin(total * Math.PI + this.phase[2]) * 127 + 128);
-        return new int[] { r, g, b };
+        return new int[] { (int) r, (int) g, (int) b };
     }
 
-    public FrameBuffer getNextFrame() {
-        frameBuffer new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
+    public SceneResult getNextFrame() {
+        FrameBuffer frameBuffer = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {
                 int[] pixel = getPlasmaPixel(x, y, t);

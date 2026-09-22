@@ -1,91 +1,12 @@
 package dev.jchristoffersen.lightbox.text;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-public class Glyph {
-    private string title;
-    private int encoding;
-    private int swidth;
-    private int dwidth;
-    private int bbxWidth;
-    private int bbxHeight;
-    private int bbxXOffset;
-    private int bbxYOffset;
-    private int[] bitmap;
-
-    Glyph(Builder builder) {
-        this.title = builder.title;
-        this.encoding = builder.encoding;
-        this.swidth = builder.swidth;
-        this.dwidth = builder.dwidth;
-        this.bbxWidth = builder.bbxWidth;
-        this.bbxHeight = builder.bbxHeight;
-        this.bbxXOffset = builder.bbxXOffset;
-        this.bbxYOffset = builder.bbxYOffset;
-        this.bitmap = builder.bitmap;
-    }
-
-    public static final class Builder {
-        private string title;
-        private int encoding;
-        private int swidth;
-        private int dwidth;
-        private int bbxWidth;
-        private int bbxHeight;
-        private int bbxXOffset;
-        private int bbxYOffset;
-        private int[] bitmap;
-
-        public Builder title(string title) {
-            this.title = title;
-            return this;
-        }
-
-        public Builder encoding(int encoding) {
-            this.encoding = encoding;
-            return this;
-        }
-
-        public Builder swidth(int swidth) {
-            this.swidth = swidth;
-            return this;
-        }
-        
-        public Builder dwidth(int dwidth) {
-            this.dwidth = dwidth;
-            return this;
-        }
-
-        public Builder bbxWidth(int bbxWidth) {
-            this.bbxWidth = bbxWidth;
-            return this;
-        }
-
-        public Builder bbxHeight(int bbxHeight) {
-            this.bbxHeight = bbxHeight;
-            return this;
-        }
-        
-        public Builder bbxXOffset(int bbxXOffset) {
-            this.bbxXOffset = bbxXOffset;
-            return this;
-        }
-
-        public Builder bbxYOffset(int bbxYOffset) {
-            this.bbxYOffset = bbxYOffset;
-            return this;
-        }
-        
-        public Builder bitmap(int[] bitmap) {
-            this.bitmap = bitmap;
-            return this;
-        }
-
-        public Glyph build() {
-            return new Glyph(this);
-        }
-    }
-}
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ParsedBdf {
     private HashMap<Integer, Glyph> glyphs;
@@ -97,60 +18,65 @@ public class ParsedBdf {
     public Glyph getGlyph(int encoding) {
         Glyph glyph = this.glyphs.get(encoding);
         if (glyph == null) {
-            throw new IllegalArgumentException(`Glyph with encoding ${encoding} not found`);
+            throw new IllegalArgumentException("Glyph with encoding " + encoding + " not found");
         }
         return glyph;
     }
 
-    public static CompletableFuture<ParsedBdf> parse(string filePath) {
+    public static CompletableFuture<ParsedBdf> parse(String filePath) {
         return CompletableFuture.supplyAsync(() -> {
             HashMap<Integer, Glyph> glyphs = new HashMap<>();
-            HashMap<String, String> meta = new HashMap<>();
-            Builder currentGlyph = null;
-            boolean inBitmap = false;
+            try {
+                List<String> allLines = Files.readAllLines(Paths.get(filePath));
+                HashMap<String, String> meta = new HashMap<>();
+                Glyph.Builder glyphBuilder = null;
+                boolean inBitmap = false;
 
-            try (Stream<String> lines = Files.lines(path)) {
-                lines.forEach(line -> {
+                for (String line : allLines) {
                     String[] words = line.split("\\s+");
-                    if (currentGlyph != null) {
+                    if (glyphBuilder != null) {
                         if (words[0].equals("ENDCHAR")) {
-                            glyphs.put(currentGlyph.getEncoding(), currentGlyph.build());
-                            currentGlyph = null;
+                            glyphs.put(glyphBuilder.encoding, glyphBuilder.build());
+                            glyphBuilder = null;
                             inBitmap = false;
                         } else if (words[0].equals("BITMAP")) {
                             inBitmap = true;
-                            currentGlyph.setBitmap(new ArrayList<>());
+                            glyphBuilder.setBitmap(new ArrayList<>());
                         } else if (inBitmap) {
-                            currentGlyph.getBitmap().add(words[0]);
+                            glyphBuilder.getBitmap().add(Integer.parseInt(words[0], 16));
                         } else {
                             switch (words[0]) {
                                 case "ENCODING":
-                                    currentGlyph.setEncoding(Integer.parseInt(words[1]));
+                                    glyphBuilder.encoding = Integer.parseInt(words[1]);
                                     break;
                                 case "SWIDTH":
-                                    currentGlyph.setSwidth(Integer.parseInt(words[1]));
+                                    glyphBuilder.swidth = Integer.parseInt(words[1]);
                                     break;
                                 case "DWIDTH":
-                                    currentGlyph.setDwidth(Integer.parseInt(words[1]));
+                                    glyphBuilder.dwidth = Integer.parseInt(words[1]);
                                     break;
                                 case "BBX":
-                                    currentGlyph.setBbxWidth(Integer.parseInt(words[1]));
-                                    currentGlyph.setBbxHeight(Integer.parseInt(words[2]));
-                                    currentGlyph.setBbxXOffset(Integer.parseInt(words[3]));
-                                    currentGlyph.setBbxYOffset(Integer.parseInt(words[4]));
+                                    glyphBuilder.bbxWidth = Integer.parseInt(words[1]);
+                                    glyphBuilder.bbxHeight = Integer.parseInt(words[2]);
+                                    glyphBuilder.bbxXOffset = Integer.parseInt(words[3]);
+                                    glyphBuilder.bbxYOffset = Integer.parseInt(words[4]);
                                     break;
                             }
                         }
                     } else {
                         if (words[0].equals("STARTCHAR")) {
-                            currentGlyph = new Glyph.Builder();
-                            currentGlyph.setTitle(words[1]);
+                            glyphBuilder = new Glyph.Builder();
+                            glyphBuilder.title = words[1];
                         } else {
                             meta.put(words[0], words[1]);
                         }
                     }
-                });
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading file " + filePath, e);
             }
-        })
+
+            return new ParsedBdf(glyphs);
+        });
     }
 }

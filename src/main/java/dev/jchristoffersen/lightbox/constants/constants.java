@@ -4,7 +4,7 @@ public final class Constants {
     public static final int WIDTH = 64;
     public static final int HEIGHT = 32;
     
-    private constants() {
+    private Constants() {
         throw new IllegalStateException("Constants class should not be instantiated");
     }
 }

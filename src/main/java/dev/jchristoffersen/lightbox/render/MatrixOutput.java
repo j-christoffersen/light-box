@@ -1,4 +1,4 @@
-package com.example.lightbox.render;
+package dev.jchristoffersen.lightbox.render;
 
 public interface MatrixOutput {
 
