@@ -7,8 +7,9 @@ repositories {
 }
 
 dependencies {
-    implementation("net.java.dev.jna:jna:5.14.0")
+    implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.google.guava:guava:33.3.1-jre")
+    implementation("net.java.dev.jna:jna:5.14.0")
 }
 
 application {

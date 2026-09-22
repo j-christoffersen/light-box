@@ -14,6 +14,10 @@ public class TextRenderer {
         this.bdf = bdf;
         this.color = new byte[] { (byte) (color >> 16), (byte) (color >> 8), (byte) color };
     }
+
+    public void setColor(int color) {
+        this.color = new byte[] { (byte) (color >> 16), (byte) (color >> 8), (byte) color };
+    }
     
     record TextBitmap(int basisCharHeight, int minYOffset, long[] bitmap) {}
     private TextBitmap getTextBitmap(String text) {
