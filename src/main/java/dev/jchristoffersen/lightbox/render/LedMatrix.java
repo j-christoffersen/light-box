@@ -1,6 +1,6 @@
 package dev.jchristoffersen.lightbox.render;
 
-public interface MatrixOutput {
+public interface LedMatrix {
 
     int width();
 

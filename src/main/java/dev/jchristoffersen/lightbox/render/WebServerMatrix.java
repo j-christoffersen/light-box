@@ -1,3 +1,3 @@
-public class WebServerMatrix implements MatrixOutput {
+public class WebServerMatrix implements LedMatrix {
 
 }

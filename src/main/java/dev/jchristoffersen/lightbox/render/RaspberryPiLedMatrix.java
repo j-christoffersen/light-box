@@ -1,3 +1,3 @@
-public class RaspberryPiLedMatrix implements MatrixOutput {
+public class RaspberryPiLedMatrix implements LedMatrix {
 
 }

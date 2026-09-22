@@ -3,15 +3,15 @@ package dev.jchristoffersen.lightbox.text;
 import java.util.ArrayList;
 
 public class Glyph {
-    public String title;
-    public int encoding;
-    public int swidth;
-    public int dwidth;
-    public int bbxWidth;
-    public int bbxHeight;
-    public int bbxXOffset;
-    public int bbxYOffset;
-    public int[] bitmap;
+    public final String title;
+    public final int encoding;
+    public final int swidth;
+    public final int dwidth;
+    public final int bbxWidth;
+    public final int bbxHeight;
+    public final int bbxXOffset;
+    public final int bbxYOffset;
+    public final int[] bitmap;
 
     Glyph(Builder builder) {
         this.title = builder.title;

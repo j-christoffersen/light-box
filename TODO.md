@@ -1,1 +1,3 @@
 - should the buffer be overwritten or reallocated every frame?
+- Text Rendering
+- Prep async

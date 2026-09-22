@@ -28,6 +28,13 @@ public final class FrameBuffer {
         pixels[idx + 2] = (byte) rgb;
     }
 
+    public void setPixel(int x, int y, byte[] rgb) {
+        int idx = (y * width + x) * 3;
+        pixels[idx] = rgb[0];
+        pixels[idx + 1] = rgb[1];
+        pixels[idx + 2] = rgb[2];
+    }
+
     public void clear() {
         Arrays.fill(pixels, (byte) 0);
     }
