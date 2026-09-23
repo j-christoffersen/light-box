@@ -25,7 +25,7 @@ public class StockScene extends StaticScene {
     private YahooApiClient.IntradayData intradayData;
     private ParsedBdf parsedBdf;
 
-    StockScene(String ticker) {
+    public StockScene(String ticker) {
         this.ticker = ticker;
     }
     
@@ -36,6 +36,10 @@ public class StockScene extends StaticScene {
             YahooApiClient.IntradayData intradayData = yahooApiClient.getIntradayData(ticker);
             this.intradayData = intradayData;
             this.parsedBdf = ParsedBdf.parse("TODO");
+        })
+        .exceptionally(e -> {
+            System.err.println("Error fetching stock info: " + e.getMessage());
+            return null;
         });
     }
 

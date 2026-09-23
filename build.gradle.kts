@@ -7,8 +7,11 @@ repositories {
 }
 
 dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.google.guava:guava:33.3.1-jre")
+    implementation("com.socketio4j:netty-socketio-core:4.0.1")
     implementation("net.java.dev.jna:jna:5.14.0")
 }
 
@@ -26,4 +29,12 @@ java {
 tasks.named("run") {
     // Uncomment if the native library needs a specific search path
     // jvmArgs += ["-Djna.library.path=/path/to/your/so/files"]
+}
+
+tasks.register<JavaExec>("runLocal") {
+    group = "application"
+    description = "Executes the Local.java entrypoint file."
+    
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("dev.jchristoffersen.lightbox.Local") 
 }

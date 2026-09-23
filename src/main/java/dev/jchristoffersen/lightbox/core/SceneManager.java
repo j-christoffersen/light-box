@@ -17,7 +17,7 @@ import dev.jchristoffersen.lightbox.scene.Transition;
 /**
  * Manages the scenes playlist.
  */
-class SceneManager {
+public class SceneManager {
     private final Iterator<Supplier<Scene>> scenes;
     private final Iterator<BiFunction<Scene, Scene, Transition>> transitions;
     private final int ticksPerScene;
@@ -27,7 +27,7 @@ class SceneManager {
     private Scene nextScene;
     private int ticks;
 
-    SceneManager(Iterable<Supplier<Scene>> scenes, Iterable<BiFunction<Scene, Scene, Transition>> transitions, int ticksPerScene) {
+    public SceneManager(Iterable<Supplier<Scene>> scenes, Iterable<BiFunction<Scene, Scene, Transition>> transitions, int ticksPerScene) {
         this.scenes = Iterators.cycle(Objects.requireNonNull(scenes, "scenes"));
         this.transitions = Iterators.cycle(Objects.requireNonNull(transitions, "transitions"));
         this.ticksPerScene = ticksPerScene;

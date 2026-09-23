@@ -1,5 +1,6 @@
 package dev.jchristoffersen.lightbox.scenes.apiClients;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -7,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Arrays;
 
+import lombok.SneakyThrows;
 import com.google.gson.Gson;
 
 public class YahooApiClient {
@@ -23,6 +25,7 @@ public class YahooApiClient {
     record Quote(double[] close) {}
 
     public record IntradayData(int[] timestamps, double[] prices, double currentPrice, double previousClose) {}
+    @SneakyThrows
     public IntradayData getIntradayData(String ticker) {
         String url = "https://query1.finance.yahoo.com/v8/finance/chart/" + ticker + "?interval=1m&range=1d";
         HttpRequest request = HttpRequest.newBuilder()

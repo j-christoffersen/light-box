@@ -13,7 +13,7 @@ public class PlasmaScene implements Scene {
     private double[] beta;
     private int t;
 
-    PlasmaScene() {
+    public PlasmaScene() {
         // Initialize scene with random coefficients and phase values
         this.phase = new double[3];
         this.alpha = new double[4];

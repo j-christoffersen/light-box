@@ -2,6 +2,8 @@ package dev.jchristoffersen.lightbox.render;
 
 import java.util.Arrays;
 
+import com.google.gson.Gson;
+
 public final class FrameBuffer {
 
     public final int width;
@@ -33,6 +35,11 @@ public final class FrameBuffer {
         pixels[idx] = rgb[0];
         pixels[idx + 1] = rgb[1];
         pixels[idx + 2] = rgb[2];
+    }
+
+    public int getPixelInt(int x, int y) {
+        int idx = (y * width + x) * 3;
+        return (pixels[idx] << 16) | (pixels[idx + 1] << 8) | pixels[idx + 2];
     }
 
     public void clear() {
