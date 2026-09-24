@@ -84,7 +84,7 @@ public class WebServerMatrix implements LedMatrix {
 
     public void present(FrameBuffer buffer) {
         System.out.println("Presenting frame");
-        // System.out.println(Arrays.toString(buffer.pixels));
+        System.out.println(Arrays.toString(buffer.pixels));
         String encoded = Base64.getEncoder().encodeToString(buffer.pixels);
         socketServer.getBroadcastOperations().sendEvent("frame", encoded);
     }

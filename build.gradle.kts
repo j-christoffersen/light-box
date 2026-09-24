@@ -38,3 +38,17 @@ tasks.register<JavaExec>("runLocal") {
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("dev.jchristoffersen.lightbox.Local") 
 }
+
+tasks.register<JavaExec>("parseBdf") {
+    group = "application"
+    description = "Parse a BDF and inspect the glyphs"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("dev.jchristoffersen.lightbox.tools.ParseBdf")
+}
+
+tasks.register<JavaExec>("textRenderer") {
+    group = "application"
+    description = "Render text to a bitmap and print to console"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("dev.jchristoffersen.lightbox.tools.TextRendererTool")
+}

@@ -56,7 +56,7 @@ public class ClockScene extends StaticScene {
 
     public CompletableFuture<Void> prep() {
         return CompletableFuture.runAsync(() -> {
-            this.parsedBdf = ParsedBdf.parse("TODO");
+            this.parsedBdf = ParsedBdf.parse("/fonts/5x7.bdf");
         });
     }
 
@@ -86,9 +86,9 @@ public class ClockScene extends StaticScene {
         }
 
         TextRenderer textRenderer = new TextRenderer(parsedBdf, 0xffffff);
-        textRenderer.renderTextToFrameBuffer(one, 0, -1, frameBuffer);
-        textRenderer.renderTextToFrameBuffer(two, 0, 7, frameBuffer);
-        textRenderer.renderTextToFrameBuffer(three, 0, 14, frameBuffer);
+        textRenderer.renderTextToFrameBuffer(one, 1, 1, frameBuffer);
+        textRenderer.renderTextToFrameBuffer(two, 1, 8, frameBuffer);
+        textRenderer.renderTextToFrameBuffer(three, 1, 15, frameBuffer);
 
         return frameBuffer;
     }

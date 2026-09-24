@@ -25,7 +25,7 @@ public class ParsedBdf {
     public static ParsedBdf parse(String filePath) {
         HashMap<Integer, Glyph> glyphs = new HashMap<>();
         try {
-            List<String> allLines = Files.readAllLines(Paths.get(filePath));
+            List<String> allLines = Files.readAllLines(Paths.get(ParsedBdf.class.getResource(filePath).getPath()));
             HashMap<String, String> meta = new HashMap<>();
             Glyph.Builder glyphBuilder = null;
             boolean inBitmap = false;
@@ -66,7 +66,8 @@ public class ParsedBdf {
                         glyphBuilder = new Glyph.Builder();
                         glyphBuilder.title = words[1];
                     } else {
-                        meta.put(words[0], words[1]);
+                        // a bit hacky but we don't need these meta values really
+                        meta.put(words[0], words.length > 1 ? words[1] : "");
                     }
                 }
             }

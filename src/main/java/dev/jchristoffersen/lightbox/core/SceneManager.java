@@ -34,7 +34,7 @@ public class SceneManager {
     CompletableFuture<Void> start() {
         Supplier<Scene> sceneSupplier = scenes.next();
         currentScene = sceneSupplier.get();
-        return CompletableFuture.runAsync(currentScene::prep);
+        return currentScene.prep();
     }
 
     FrameBuffer getNextFrame() {
@@ -42,7 +42,7 @@ public class SceneManager {
             Supplier<Scene> nextSceneSupplier = scenes.next();
             nextScene = nextSceneSupplier.get();
 
-            prepFuture = CompletableFuture.runAsync(nextScene::prep);
+            prepFuture = nextScene.prep();
         }
 
         if (prepFuture != null && prepFuture.isDone()) {

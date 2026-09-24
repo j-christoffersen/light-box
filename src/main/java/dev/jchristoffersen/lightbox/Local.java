@@ -19,9 +19,9 @@ public class Local {
     public static void main(String[] args) throws IOException {
         SceneManager sceneManager = new SceneManager(List.<Supplier<Scene>>of(
             () -> new GameOfLifeScene(),
-            () -> new PlasmaScene(),
             () -> new ClockScene(),
-            () -> new StockScene("PYPL")
+            () -> new StockScene("PYPL"),
+            () -> new PlasmaScene()
         ), List.of(
             (oldScene, newScene) -> new EmptyTransition(oldScene, newScene)
         ), 60 * 15); // 15 seconds per scene

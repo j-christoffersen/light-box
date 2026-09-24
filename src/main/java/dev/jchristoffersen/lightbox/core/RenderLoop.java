@@ -24,6 +24,8 @@ public class RenderLoop {
             } catch (Exception e) {
                 System.err.println("Error in frame clock tick");
                 e.printStackTrace();
+                // stop process
+                System.exit(1);
             }
         });
     }
