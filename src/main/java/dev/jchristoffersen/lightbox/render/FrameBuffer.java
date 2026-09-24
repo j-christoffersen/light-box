@@ -2,8 +2,6 @@ package dev.jchristoffersen.lightbox.render;
 
 import java.util.Arrays;
 
-import com.google.gson.Gson;
-
 public final class FrameBuffer {
 
     public final int width;

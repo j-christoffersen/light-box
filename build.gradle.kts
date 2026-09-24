@@ -27,8 +27,7 @@ java {
 }
 
 tasks.named("run") {
-    // Uncomment if the native library needs a specific search path
-    // jvmArgs += ["-Djna.library.path=/path/to/your/so/files"]
+    jvmArgs += ["-Djna.library.path=/path/to/your/so/files"]
 }
 
 tasks.register<JavaExec>("runLocal") {
