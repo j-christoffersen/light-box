@@ -14,7 +14,7 @@ public class GameOfLifeScene extends SlowScene {
     private final int fgColor;
 
     public GameOfLifeScene() {
-        super(30);
+        super(10);
         grid = new boolean[Constants.HEIGHT][Constants.WIDTH];
 
         for (int y = 0; y < Constants.HEIGHT; y++) {

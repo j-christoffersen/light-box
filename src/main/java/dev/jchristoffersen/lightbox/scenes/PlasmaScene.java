@@ -26,7 +26,7 @@ public class PlasmaScene implements Scene {
         }
         for (int i = 0; i < 4; i++) {
             this.alpha[i] = 0.05 + random.nextDouble() * 0.1;
-            this.beta[i] = 0.0008 + random.nextDouble() * 0.0016;
+            this.beta[i] = 0.005 + random.nextDouble() * 0.01;
         }
     }
 
