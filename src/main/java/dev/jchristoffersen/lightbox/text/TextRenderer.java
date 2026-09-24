@@ -24,9 +24,6 @@ public class TextRenderer {
     
     record TextBitmap(int basisCharHeight, int minYOffset, long[] bitmap) {}
     private TextBitmap getTextBitmap(String text) {
-        System.out.println("Getting text bitmap for: " + text);
-        System.out.println("Text code points: " + Arrays.toString(text.codePoints().toArray()));
-        System.out.println("A glyph" + this.bdf.getGlyph('T'));
         List<Glyph> glyphs = text.codePoints().mapToObj(this.bdf::getGlyph).collect(Collectors.toList());
         Glyph basisChar = glyphs.stream().findFirst().orElseThrow();
         int basisCharHeight = basisChar.bbxHeight;
@@ -96,7 +93,6 @@ public class TextRenderer {
             for (int dx = Math.max(0, -x); dx < Math.min(64, 64 - x); dx++) {
                 if (((1L << (63 - dx)) & bitmap[dy]) != 0L) {
                     frameBuffer.setPixel(x + dx, y + dy, color);
-                    System.out.println("Setting pixel at " + (x + dx) + ", " + (y + dy) + " to " + Arrays.toString(color));
                 }
             }
         }

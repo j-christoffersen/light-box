@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.concurrent.CompletableFuture;
 
 import com.sun.net.httpserver.HttpServer;
 import com.socketio4j.socketio.Configuration;
@@ -18,6 +19,7 @@ import com.socketio4j.socketio.SocketIOServer;
 public class WebServerMatrix implements LedMatrix {
     private final HttpServer httpServer;
     private final SocketIOServer socketServer;
+    private final CompletableFuture<Void> connected;
 
     public WebServerMatrix() throws IOException {
         // Create the HTTP server
@@ -48,6 +50,14 @@ public class WebServerMatrix implements LedMatrix {
         config.setPort(9092);
         config.setOrigin("http://localhost:3000");
         socketServer = new SocketIOServer(config);
+
+        // listen for the client to connect so we're not pushing frames into the abyss
+        connected = new CompletableFuture<Void>();
+        socketServer.addConnectListener(client -> {
+            System.out.println("Client connected: " + client.getSessionId());
+            connected.complete(null);
+        });
+
         socketServer.start();
         System.out.println("Server successfully running on http://localhost:3000");
 
@@ -83,9 +93,12 @@ public class WebServerMatrix implements LedMatrix {
     }
 
     public void present(FrameBuffer buffer) {
-        System.out.println("Presenting frame");
-        System.out.println(Arrays.toString(buffer.pixels));
+        // System.out.println("Presenting frame");
         String encoded = Base64.getEncoder().encodeToString(buffer.pixels);
         socketServer.getBroadcastOperations().sendEvent("frame", encoded);
+    }
+
+    public CompletableFuture<Void> ready() {
+        return connected;
     }
 }

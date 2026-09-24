@@ -23,9 +23,6 @@ public class GameOfLifeScene extends SlowScene {
             }
         }
 
-        System.out.println("GameOfLifeScene initialized");
-        System.out.println(Arrays.toString(grid));
-
         int[] palette = {0x9955ff, 0x5599ff, 0x99ff55, 0xff5599};
         fgColor = palette[ThreadLocalRandom.current().nextInt(palette.length)];
     }

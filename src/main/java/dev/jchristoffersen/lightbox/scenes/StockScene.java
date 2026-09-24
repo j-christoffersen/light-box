@@ -35,17 +35,18 @@ public class StockScene extends StaticScene {
             YahooApiClient yahooApiClient = new YahooApiClient();
             YahooApiClient.IntradayData intradayData = yahooApiClient.getIntradayData(ticker);
             this.intradayData = intradayData;
-            this.parsedBdf = ParsedBdf.parse("TODO");
+            this.parsedBdf = ParsedBdf.parse("/fonts/5x8.bdf");
         })
         .exceptionally(e -> {
-            System.err.println("Error fetching stock info: " + e.getMessage());
+            System.err.println("Error prepping StockScene: " + e.getMessage());
+            e.printStackTrace();
             return null;
         });
     }
 
     public FrameBuffer renderOnce() {
         if (intradayData == null) {
-            throw new IllegalStateException("Intraday data not fetched");
+            throw new IllegalStateException("Intraday data has not been fetched");
         }
 
         double gain = intradayData.currentPrice() - intradayData.previousClose();

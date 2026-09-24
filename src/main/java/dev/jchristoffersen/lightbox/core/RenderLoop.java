@@ -8,10 +8,11 @@ import dev.jchristoffersen.lightbox.render.FrameBuffer;
 public class RenderLoop {
     private final FrameClock frameClock;
     private final SceneManager sceneManager;
+    private final LedMatrix ledMatrix;
 
     public RenderLoop(SceneManager _sceneManager, LedMatrix _ledMatrix) {
         sceneManager = Objects.requireNonNull(_sceneManager, "sceneManager");
-        LedMatrix ledMatrix = Objects.requireNonNull(_ledMatrix, "ledMatrix");
+        ledMatrix = Objects.requireNonNull(_ledMatrix, "ledMatrix");
 
         this.frameClock = new FrameClock(60, () -> {
             try {
@@ -31,8 +32,13 @@ public class RenderLoop {
     }
 
     public void start() {
-        sceneManager.start().thenRun(() -> {
+        ledMatrix.ready().thenCompose((_void) -> {
+            return sceneManager.start().thenRun(() -> {
+                System.out.println("sceneManager.start finished");
+            });
+        }).thenRun(() -> {
             frameClock.start();
+            System.out.println("frameClock.start finished");
         });
     }
 }

@@ -34,7 +34,11 @@ public class SceneManager {
     CompletableFuture<Void> start() {
         Supplier<Scene> sceneSupplier = scenes.next();
         currentScene = sceneSupplier.get();
-        return currentScene.prep();
+        return currentScene.prep().exceptionally(e -> {
+            System.err.println("Error prepping first scene");
+            e.printStackTrace();
+            return null;
+        });
     }
 
     FrameBuffer getNextFrame() {

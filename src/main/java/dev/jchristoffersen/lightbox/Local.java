@@ -18,9 +18,9 @@ import dev.jchristoffersen.lightbox.core.SceneManager;
 public class Local {
     public static void main(String[] args) throws IOException {
         SceneManager sceneManager = new SceneManager(List.<Supplier<Scene>>of(
+            () -> new StockScene("PYPL"),
             () -> new GameOfLifeScene(),
             () -> new ClockScene(),
-            () -> new StockScene("PYPL"),
             () -> new PlasmaScene()
         ), List.of(
             (oldScene, newScene) -> new EmptyTransition(oldScene, newScene)
