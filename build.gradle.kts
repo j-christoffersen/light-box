@@ -16,18 +16,17 @@ dependencies {
 }
 
 application {
-    // Change to your actual main class once you create it
-    mainClass = "dev.jchristoffersen.lightbox.Main"
+    mainClass.set("dev.jchristoffersen.lightbox.Main")
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
-tasks.named("run") {
-    jvmArgs += ["-Djna.library.path=/path/to/your/so/files"]
+tasks.named<JavaExec>("run") {
+    jvmArgs=listOf("-Djna.library.path=~/code/rpi-rgb-led-matrix/lib/ilibrgbmatrix.so.1")
 }
 
 tasks.register<JavaExec>("runLocal") {
