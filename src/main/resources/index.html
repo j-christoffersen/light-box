@@ -23,9 +23,9 @@
 
     <canvas id="matrixCanvas"></canvas>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
     <script>
-        const socket = io();
+        const socket = io('http://localhost:9092');
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         function parseRgb(rgb) {
@@ -40,17 +40,26 @@
         canvas.width = 64 * SCALE;
         canvas.height = 32 * SCALE;
 
-        socket.on('frame', (pixels) => {
+        socket.on('connect', () => console.log('connected!', socket.id));
+        socket.on('connect_error', (err) => console.error('connect error:', err));
+        socket.on('disconnect', (reason) => console.log('disconnected:', reason));
+
+        socket.on('frame', (base64Data) => {
+            console.log("Frame received", base64Data);
+            const colorData = Uint8Array.fromBase64(base64Data);
+            console.log("converted data", colorData)
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Calculate radius and center offsets for the circles
             const radius = (SCALE - 1) / 2;
 
-            for (let y = 0; y < matrix.length; y++) {
-                for (let x = 0; x < matrix[y].length; x++) {
-                    const r = pixels[y * 64 + x];
-                    const g = pixels[y * 64 + x + 1];
-                    const b = pixels[y * 64 + x + 2];
+            for (let y = 0; y < 32; y++) {
+                for (let x = 0; x < 64; x++) {
+                    const r = colorData[y * 64 * 3 + x * 3];
+                    const g = colorData[y * 64 * 3 + x * 3 + 1];
+                    const b = colorData[y * 64 * 3 + x * 3 + 2];
+
+                    // console.log("????", r, g, b);
                     
                     // Find the center point X and Y for each LED pixel
                     const centerX = (x * SCALE) + (SCALE / 2);

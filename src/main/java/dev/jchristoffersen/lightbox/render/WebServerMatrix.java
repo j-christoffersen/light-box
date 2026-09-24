@@ -8,6 +8,8 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Base64;
 
 import com.sun.net.httpserver.HttpServer;
 import com.socketio4j.socketio.Configuration;
@@ -44,6 +46,7 @@ public class WebServerMatrix implements LedMatrix {
         Configuration config = new Configuration();
         config.setHostname("localhost");
         config.setPort(9092);
+        config.setOrigin("http://localhost:3000");
         socketServer = new SocketIOServer(config);
         socketServer.start();
         System.out.println("Server successfully running on http://localhost:3000");
@@ -53,6 +56,7 @@ public class WebServerMatrix implements LedMatrix {
 
     // OS independent cross-platform utility to open browser windows
     private static void openBrowser(String url) {
+        System.out.println("Opening browser to " + url);
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             try {
                 Desktop.getDesktop().browse(new URI(url));
@@ -79,6 +83,9 @@ public class WebServerMatrix implements LedMatrix {
     }
 
     public void present(FrameBuffer buffer) {
-        socketServer.getBroadcastOperations().sendEvent("frame", buffer.pixels);
+        System.out.println("Presenting frame");
+        // System.out.println(Arrays.toString(buffer.pixels));
+        String encoded = Base64.getEncoder().encodeToString(buffer.pixels);
+        socketServer.getBroadcastOperations().sendEvent("frame", encoded);
     }
 }

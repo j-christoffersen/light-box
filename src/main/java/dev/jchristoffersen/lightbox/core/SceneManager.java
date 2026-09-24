@@ -3,8 +3,6 @@ package dev.jchristoffersen.lightbox.core;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import com.google.common.collect.Iterators;
@@ -40,7 +38,7 @@ public class SceneManager {
     }
 
     FrameBuffer getNextFrame() {
-        if (prepFuture == null && ticks++ >= ticksPerScene) {
+        if (ticks++ >= ticksPerScene && prepFuture == null) {
             Supplier<Scene> nextSceneSupplier = scenes.next();
             nextScene = nextSceneSupplier.get();
 
@@ -53,7 +51,8 @@ public class SceneManager {
             prepFuture = null;
         }
 
-        SceneResult sceneResult = currentScene.getNextFrame();
+        SceneResult sceneResult = currentScene.getNextFrame();;
+
         if (sceneResult instanceof SceneResult.Done done) {
             currentScene = done.nextScene();
             ticks = 0;

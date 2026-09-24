@@ -14,11 +14,16 @@ public class RenderLoop {
         LedMatrix ledMatrix = Objects.requireNonNull(_ledMatrix, "ledMatrix");
 
         this.frameClock = new FrameClock(60, () -> {
-            FrameBuffer nextFrame = sceneManager.getNextFrame();
+            try {
+                FrameBuffer nextFrame = sceneManager.getNextFrame();
 
-            // If we get a new buffer, push to the screen. Otherwise, we're done.
-            if (nextFrame != null) {
-                ledMatrix.present(nextFrame);
+                // If we get a new buffer, push to the screen. Otherwise, we're done.
+                if (nextFrame != null) {
+                    ledMatrix.present(nextFrame);
+                }
+            } catch (Exception e) {
+                System.err.println("Error in frame clock tick");
+                e.printStackTrace();
             }
         });
     }
