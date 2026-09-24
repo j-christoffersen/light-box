@@ -1,6 +1,7 @@
 package dev.jchristoffersen.lightbox.scenes;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import dev.jchristoffersen.lightbox.constants.Constants;
@@ -67,25 +68,31 @@ public class StockScene extends StaticScene {
         // iterate and get price for each pixel
         int[] timestamps = intradayData.timestamps();
         int t0 = timestamps[0];
-        double[] pixelData = new double[64];
+        Double[] pixelData = new Double[64];
         for (int i = 0; i < timestamps.length; i++) {
             double minutesSince930 = (double) (timestamps[i] - t0) / 60;
             int pixelIndex = (int) (minutesSince930 / 6.09375);
             pixelData[pixelIndex] = intradayData.prices()[i];
         }
 
-        double high = Arrays.stream(pixelData).max().getAsDouble();
-        double low = Arrays.stream(pixelData).min().getAsDouble();
+        double high = Arrays.stream(pixelData).filter(Objects::nonNull).mapToDouble(Double::doubleValue).max().getAsDouble();
+        double low = Arrays.stream(pixelData).filter(Objects::nonNull).mapToDouble(Double::doubleValue).min().getAsDouble();
+        System.out.println("intradayData.prices: " + Arrays.toString(intradayData.prices()));
+        System.out.println("pixelData: " + Arrays.toString(pixelData));
+        System.out.println("high: " + high);
+        System.out.println("low: " + low);
         for (int x = 0; x < 64; x++) {
-            if (pixelData[x] != 0) {
+            if (pixelData[x] != null) {
                 int v = 31 - (int) Math.ceil((pixelData[x] - low) / (high - low) * 15);
+                System.out.println("pixelData[x]: " + pixelData[x]);
+                System.out.println("v: " + v);
                 for (int y = 16; y < 32; y++) {
                     if (y == v) {
                         frameBuffer.setPixel(x, y, gain < 0 ? Colors.red : gain > 0 ? Colors.green : Colors.white);
                     } else if (y >= intradayData.previousClose() && y < v) {
                         frameBuffer.setPixel(x, y, gain < 0 ? Colors.lightRed : gain > 0 ? Colors.lightGreen : Colors.grey);
                     } else if (y <= intradayData.previousClose() && y > v) {
-                        frameBuffer.setPixel(x, y, gain < 0 ? Colors.lightGreen : gain > 0 ? Colors.lightRed : Colors.grey);
+                        frameBuffer.setPixel(x, y, gain < 0 ? Colors.lightRed : gain > 0 ? Colors.lightGreen : Colors.grey);
                     }
                 }
             }
