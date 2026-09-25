@@ -35,6 +35,11 @@ public final class FrameBuffer {
         pixels[idx + 2] = rgb[2];
     }
 
+    public byte[] getPixel(int x, int y) {
+        int idx = (y * width + x) * 3;
+        return new byte[] { pixels[idx], pixels[idx + 1], pixels[idx + 2] };
+    }
+
     public int getPixelInt(int x, int y) {
         int idx = (y * width + x) * 3;
         return (pixels[idx] << 16) | (pixels[idx + 1] << 8) | pixels[idx + 2];

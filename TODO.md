@@ -1,3 +1,4 @@
+- Proofread
 - should the buffer be overwritten or reallocated every frame?
 - Done with no update
 - handle API failures
