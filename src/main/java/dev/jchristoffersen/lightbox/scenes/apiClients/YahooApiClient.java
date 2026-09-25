@@ -36,14 +36,8 @@ public class YahooApiClient {
 
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Response received");
-
         Gson gson = new Gson();
         ChartData intradayData = gson.fromJson(response.body(), ChartData.class);
-
-        System.out.println("Gson'd");
-        System.out.println(intradayData.chart().result()[0].meta().symbol());
-        System.out.flush();
 
         Result result = Arrays.stream(intradayData.chart().result())
             .filter(r -> r.meta().symbol().equals(ticker))
