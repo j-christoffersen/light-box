@@ -46,7 +46,11 @@ public class SceneManager {
             Supplier<Scene> nextSceneSupplier = scenes.next();
             nextScene = nextSceneSupplier.get();
 
-            prepFuture = nextScene.prep();
+            prepFuture = nextScene.prep().exceptionally(e -> {
+                System.err.println("Error prepping next scene");
+                e.printStackTrace();
+                return null;
+            });
         }
 
         if (prepFuture != null && prepFuture.isDone()) {

@@ -1,11 +1,18 @@
 package dev.jchristoffersen.lightbox.text;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
 public class ParsedBdf {
     private HashMap<Integer, Glyph> glyphs;
@@ -25,7 +32,11 @@ public class ParsedBdf {
     public static ParsedBdf parse(String filePath) {
         HashMap<Integer, Glyph> glyphs = new HashMap<>();
         try {
-            List<String> allLines = Files.readAllLines(Paths.get(ParsedBdf.class.getResource(filePath).getPath()));
+            List<String> allLines;
+            try (InputStream is = ParsedBdf.class.getResourceAsStream(filePath);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+                allLines = reader.lines().collect(Collectors.toList());
+            }
             HashMap<String, String> meta = new HashMap<>();
             Glyph.Builder glyphBuilder = null;
             boolean inBitmap = false;

@@ -19,8 +19,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         SceneManager sceneManager = new SceneManager(List.<Supplier<Scene>>of(
             () -> new GameOfLifeScene(),
-            () -> new PlasmaScene(),
             () -> new ClockScene(),
+            () -> new PlasmaScene(),
             () -> new StockScene("PYPL")
         ), List.of(
             (oldScene, newScene) -> new EmptyTransition(oldScene, newScene)

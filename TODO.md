@@ -4,6 +4,8 @@
 - Optimization: we don't copy into offscreen buffer until t_frame has passed
 - SURF SCENE
 
+Bugs:
+- rsync'd jar cannot access fonts from resources
 
 Scene ideas
 - Scrolling star wars intro

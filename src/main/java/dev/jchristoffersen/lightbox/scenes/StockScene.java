@@ -77,15 +77,10 @@ public class StockScene extends StaticScene {
 
         double high = Arrays.stream(pixelData).filter(Objects::nonNull).mapToDouble(Double::doubleValue).max().getAsDouble();
         double low = Arrays.stream(pixelData).filter(Objects::nonNull).mapToDouble(Double::doubleValue).min().getAsDouble();
-        System.out.println("intradayData.prices: " + Arrays.toString(intradayData.prices()));
-        System.out.println("pixelData: " + Arrays.toString(pixelData));
-        System.out.println("high: " + high);
-        System.out.println("low: " + low);
+
         for (int x = 0; x < 64; x++) {
             if (pixelData[x] != null) {
                 int v = 31 - (int) Math.ceil((pixelData[x] - low) / (high - low) * 15);
-                System.out.println("pixelData[x]: " + pixelData[x]);
-                System.out.println("v: " + v);
                 for (int y = 16; y < 32; y++) {
                     if (y == v) {
                         frameBuffer.setPixel(x, y, gain < 0 ? Colors.red : gain > 0 ? Colors.green : Colors.white);
