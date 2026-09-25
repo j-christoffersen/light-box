@@ -3,9 +3,9 @@ package dev.jchristoffersen.lightbox.scenes.transitions;
 import dev.jchristoffersen.lightbox.constants.Constants;
 import dev.jchristoffersen.lightbox.scene.Scene;
 
-public class WipeTransition extends MaskTransition {
-    public static final int DEFAULT_SLOWDOWN_FACTOR = 2;
-    public WipeTransition(Scene oldScene, Scene newScene) {
+public class BarsTransition extends MaskTransition {
+    public static final int BAR_THICKNESS = 8;
+    public BarsTransition(Scene oldScene, Scene newScene) {
         super(oldScene, newScene);
     }
 
@@ -13,9 +13,10 @@ public class WipeTransition extends MaskTransition {
         boolean[][] mask = new boolean[Constants.HEIGHT][Constants.WIDTH];
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {
-                mask[y][x] = x < progress;
+                mask[y][x] = ((y / BAR_THICKNESS) % 2 == 0) ? x < progress : (x >= Constants.WIDTH - progress);
             }
         }
+
         return new MaskResult(mask, progress >= Constants.WIDTH);
     }
 }

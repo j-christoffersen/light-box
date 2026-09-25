@@ -11,6 +11,8 @@ import dev.jchristoffersen.lightbox.scenes.GameOfLifeScene;
 import dev.jchristoffersen.lightbox.scenes.PlasmaScene;
 import dev.jchristoffersen.lightbox.scenes.StockScene;
 import dev.jchristoffersen.lightbox.scenes.SurfScene;
+import dev.jchristoffersen.lightbox.scenes.transitions.BarsTransition;
+import dev.jchristoffersen.lightbox.scenes.transitions.CircleMaskTransition;
 import dev.jchristoffersen.lightbox.scenes.transitions.EmptyTransition;
 import dev.jchristoffersen.lightbox.scenes.transitions.WipeTransition;
 import dev.jchristoffersen.lightbox.render.LedMatrix;
@@ -21,12 +23,14 @@ public class Local {
     public static void main(String[] args) throws IOException {
         SceneManager sceneManager = new SceneManager(List.<Supplier<Scene>>of(
             () -> new GameOfLifeScene(),
-            () -> new PlasmaScene(),
+            () -> new PlasmaScene()
             // () -> new SurfScene("El Porto"),
-            () -> new ClockScene(),
-            () -> new StockScene("PYPL")
+            // () -> new ClockScene(),
+            // () -> new StockScene("PYPL")
         ), List.of(
-            (oldScene, newScene) -> new WipeTransition(oldScene, newScene)
+            (oldScene, newScene) -> new WipeTransition(oldScene, newScene),
+            (oldScene, newScene) -> new BarsTransition(oldScene, newScene),
+            (oldScene, newScene) -> new CircleMaskTransition(oldScene, newScene)
         ), 60 * 15); // 15 seconds per scene
         LedMatrix ledMatrix = new WebServerMatrix();
         RenderLoop renderLoop = new RenderLoop(sceneManager, ledMatrix);
