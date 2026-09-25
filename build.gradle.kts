@@ -68,3 +68,10 @@ tasks.register<JavaExec>("textRenderer") {
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("dev.jchristoffersen.lightbox.tools.TextRendererTool")
 }
+
+tasks.register<JavaExec>("surflineApi") {
+    group = "application"
+    description = "Call the Surfline API and print the data"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("dev.jchristoffersen.lightbox.tools.SurflineApiTool")
+}

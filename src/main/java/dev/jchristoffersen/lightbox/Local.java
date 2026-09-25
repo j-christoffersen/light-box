@@ -10,6 +10,7 @@ import dev.jchristoffersen.lightbox.scenes.ClockScene;
 import dev.jchristoffersen.lightbox.scenes.GameOfLifeScene;
 import dev.jchristoffersen.lightbox.scenes.PlasmaScene;
 import dev.jchristoffersen.lightbox.scenes.StockScene;
+import dev.jchristoffersen.lightbox.scenes.SurfScene;
 import dev.jchristoffersen.lightbox.scenes.transitions.EmptyTransition;
 import dev.jchristoffersen.lightbox.render.LedMatrix;
 import dev.jchristoffersen.lightbox.core.RenderLoop;
@@ -18,6 +19,7 @@ import dev.jchristoffersen.lightbox.core.SceneManager;
 public class Local {
     public static void main(String[] args) throws IOException {
         SceneManager sceneManager = new SceneManager(List.<Supplier<Scene>>of(
+            () -> new SurfScene("El Porto"),
             () -> new GameOfLifeScene(),
             () -> new ClockScene(),
             () -> new StockScene("PYPL"),
