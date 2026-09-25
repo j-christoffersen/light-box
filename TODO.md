@@ -2,6 +2,7 @@
 - Done with no update
 - handle API failures
 - Optimization: we don't copy into offscreen buffer until t_frame has passed
+- SURF SCENE
 
 
 Scene ideas

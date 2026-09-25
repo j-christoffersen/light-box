@@ -72,7 +72,7 @@ public class StockScene extends StaticScene {
         for (int i = 0; i < timestamps.length; i++) {
             double minutesSince930 = (double) (timestamps[i] - t0) / 60;
             int pixelIndex = (int) (minutesSince930 / 6.09375);
-            pixelData[pixelIndex] = intradayData.prices()[i];
+            pixelData[Math.min(pixelIndex, 63)] = intradayData.prices()[i];
         }
 
         double high = Arrays.stream(pixelData).filter(Objects::nonNull).mapToDouble(Double::doubleValue).max().getAsDouble();

@@ -7,8 +7,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
+    compileOnly("org.projectlombok:lombok:1.18.48")
+    annotationProcessor("org.projectlombok:lombok:1.18.48")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.google.guava:guava:33.3.1-jre")
     implementation("com.socketio4j:netty-socketio-core:4.0.1")
@@ -25,9 +25,18 @@ java {
     }
 }
 
-tasks.named<JavaExec>("run") {
-    jvmArgs=listOf("-Djna.library.path=~/code/rpi-rgb-led-matrix/lib/ilibrgbmatrix.so.1")
+tasks.named<JavaExec>("run") {}
+
+tasks.register<Exec>("deploy") {
+    dependsOn("installDist")
+    commandLine("rsync", "-avz", "./build/install/light-box/", "lightbox:~/code/light-box-build")
 }
+
+tasks.register<Exec>("runPi") {
+    commandLine("ssh", "lightbox", "\"cd ~/lightbox && JAVA_OPTS='-Djna.library.path=~/code/rpi-rgb-led-matrix/lib/ilibrgbmatrix.so.1' ./bin/light-box\"")
+}
+
+// TOOLS
 
 tasks.register<JavaExec>("runLocal") {
     group = "application"
