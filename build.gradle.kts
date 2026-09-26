@@ -33,17 +33,19 @@ tasks.register<Exec>("deploy") {
     commandLine("rsync", "-avz", "./build/install/light-box/", "lightbox:~/code/light-box-build")
 }
 
-tasks.register<Exec>("runPi") {
-    commandLine("ssh", "lightbox", "\"ls && cd ~/code/light-box-build && ls && ./bin/light-box\"")
-}
+// TODO use sudo
+// tasks.register<Exec>("runPi") {
+//     commandLine("ssh", "lightbox", "\"ls && cd ~/code/light-box-build && ls && ./bin/light-box\"")
+// }
 
 tasks.register<Exec>("deployFull") {
     commandLine("rsync", "-avz", ".", "lightbox:~/code/light-box-sync")
 }
 
-tasks.register<Exec>("runPiFull") {
-    commandLine("ssh", "lightbox", "\"cd /home/jackson/code/light-box-sync & && ./bin/light-box\"")
-}
+// TODO use sudo
+// tasks.register<Exec>("runPiFull") {
+//     commandLine("ssh", "lightbox", "\"cd /home/jackson/code/light-box-sync & && ./bin/light-box\"")
+// }
 
 // TOOLS
 

@@ -24,7 +24,7 @@ public class Main {
             () -> new StockScene("PYPL")
         ), List.of(
             (oldScene, newScene) -> new EmptyTransition(oldScene, newScene)
-        ), 60 * 15); // 15 seconds per scene
+        ), 60 * 30); // 30 seconds per scene
         LedMatrix ledMatrix = new RaspberryPiLedMatrix();
         RenderLoop renderLoop = new RenderLoop(sceneManager, ledMatrix);
         renderLoop.start();

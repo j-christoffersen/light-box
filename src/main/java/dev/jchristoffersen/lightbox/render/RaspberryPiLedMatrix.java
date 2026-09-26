@@ -10,7 +10,14 @@ public class RaspberryPiLedMatrix implements LedMatrix {
 
 
     public RaspberryPiLedMatrix() {
-        ledMatrixNative = LedMatrixNative.INSTANCE.led_matrix_create(32, 2, 1); // chained 2 rows of 32 pixels each powers the 32x64 panel
+        RGBLedMatrixOptions options = new RGBLedMatrixOptions();
+        options.rows = 32;
+        options.cols = 64;
+
+        RGBLedRuntimeOptions rtOptions = new RGBLedRuntimeOptions();
+        rtOptions.gpio_slowdown = 2;
+
+        ledMatrixNative = LedMatrixNative.INSTANCE.led_matrix_create_from_options_and_rt_options(options, rtOptions);
         offscreenCanvas = LedMatrixNative.INSTANCE.led_matrix_get_canvas(ledMatrixNative);
     }
 

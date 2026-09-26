@@ -8,6 +8,7 @@ public interface LedMatrixNative extends Library {
     public static final LedMatrixNative INSTANCE = Native.load("/home/jackson/code/rpi-rgb-led-matrix/lib/librgbmatrix.so.1", LedMatrixNative.class); // TODO make dynamic
 
     public Pointer led_matrix_create(int rows, int chained, int parallel);
+    public Pointer led_matrix_create_from_options_and_rt_options(RGBLedMatrixOptions options, RGBLedRuntimeOptions rtOptions);
     public void led_matrix_delete(Pointer matrix);
 
     public Pointer led_matrix_get_canvas(Pointer matrix);
