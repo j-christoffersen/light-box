@@ -11,7 +11,6 @@
     - proxy to a cloud function? Running chromium, if needed?
 
 Bugs:
-- rsync'd jar cannot access fonts from resources
 
 More scene ideas
 - Scrolling star wars intro

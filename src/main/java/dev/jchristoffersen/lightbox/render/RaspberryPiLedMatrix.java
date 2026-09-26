@@ -17,6 +17,8 @@ public class RaspberryPiLedMatrix implements LedMatrix {
 
         RGBLedRuntimeOptions rtOptions = new RGBLedRuntimeOptions();
         rtOptions.gpio_slowdown = 2;
+        rtOptions.drop_priv_user = "jackson";
+        rtOptions.drop_priv_group = "jackson";
 
         ledMatrixNative = LedMatrixNative.INSTANCE.led_matrix_create_from_options_and_rt_options(options, rtOptions);
         offscreenCanvas = LedMatrixNative.INSTANCE.led_matrix_get_canvas(ledMatrixNative);

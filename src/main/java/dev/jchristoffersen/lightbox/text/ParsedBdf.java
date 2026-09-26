@@ -1,17 +1,12 @@
 package dev.jchristoffersen.lightbox.text;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 public class ParsedBdf {
@@ -33,10 +28,13 @@ public class ParsedBdf {
         HashMap<Integer, Glyph> glyphs = new HashMap<>();
         try {
             List<String> allLines;
-            try (InputStream is = ParsedBdf.class.getResourceAsStream(filePath);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                allLines = reader.lines().collect(Collectors.toList());
-            }
+            InputStream is = ParsedBdf.class.getResourceAsStream(filePath);
+            System.out.println("input stream: " + (is != null));
+            System.out.println("filePath: " + filePath);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            allLines = reader.lines().collect(Collectors.toList());
+
+
             HashMap<String, String> meta = new HashMap<>();
             Glyph.Builder glyphBuilder = null;
             boolean inBitmap = false;
@@ -82,8 +80,10 @@ public class ParsedBdf {
                     }
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading file " + filePath, e);
+        } catch (Exception e) {
+            System.err.println("Error reading file " + filePath);
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return new ParsedBdf(glyphs);

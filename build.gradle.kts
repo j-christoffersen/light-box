@@ -21,7 +21,7 @@ application {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -38,8 +38,17 @@ tasks.register<Exec>("deploy") {
 //     commandLine("ssh", "lightbox", "\"ls && cd ~/code/light-box-build && ls && ./bin/light-box\"")
 // }
 
+tasks.register<Exec>("deployLibs") {
+    commandLine("rsync", "-avz", "build/install/light-box/lib/", "lightbox:~/code/light-box-sync/libs/")
+}
+tasks.register<Exec>("deployClasses") {
+    commandLine("rsync", "-avz", "--delete", "build/classes/java/main/", "lightbox:~/code/light-box-sync/main/")
+}
+tasks.register<Exec>("deployResources") {
+    commandLine("rsync", "-avz", "--delete", "src/main/resources/", "lightbox:~/code/light-box-sync/resources/")
+}
 tasks.register<Exec>("deployFull") {
-    commandLine("rsync", "-avz", ".", "lightbox:~/code/light-box-sync")
+    dependsOn("compileJava", "deployLibs", "deployClasses", "deployResources")
 }
 
 // TODO use sudo
