@@ -15,5 +15,4 @@ More scene ideas
 - Scrolling star wars intro
 - Season/time bassed stardew thing
 - "analog" clock
-- Center circle transition
 - Batman transition

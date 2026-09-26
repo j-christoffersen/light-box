@@ -14,6 +14,7 @@ import dev.jchristoffersen.lightbox.scenes.SurfScene;
 import dev.jchristoffersen.lightbox.scenes.transitions.BarsTransition;
 import dev.jchristoffersen.lightbox.scenes.transitions.CircleMaskTransition;
 import dev.jchristoffersen.lightbox.scenes.transitions.EmptyTransition;
+import dev.jchristoffersen.lightbox.scenes.transitions.FadeTransition;
 import dev.jchristoffersen.lightbox.scenes.transitions.WipeTransition;
 import dev.jchristoffersen.lightbox.render.LedMatrix;
 import dev.jchristoffersen.lightbox.core.RenderLoop;
@@ -28,6 +29,7 @@ public class Local {
             // () -> new ClockScene(),
             // () -> new StockScene("PYPL")
         ), List.of(
+            (oldScene, newScene) -> new FadeTransition(oldScene, newScene),
             (oldScene, newScene) -> new CircleMaskTransition(oldScene, newScene),
             (oldScene, newScene) -> new BarsTransition(oldScene, newScene),
             (oldScene, newScene) -> new WipeTransition(oldScene, newScene)
