@@ -13,6 +13,7 @@ public class RaspberryPiLedMatrix implements LedMatrix {
         RGBLedMatrixOptions options = new RGBLedMatrixOptions();
         options.rows = 32;
         options.cols = 64;
+        // options.disable_hardware_pulsing = true;
 
         RGBLedRuntimeOptions rtOptions = new RGBLedRuntimeOptions();
         rtOptions.gpio_slowdown = 2;
