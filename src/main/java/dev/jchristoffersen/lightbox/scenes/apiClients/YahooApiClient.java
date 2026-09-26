@@ -44,8 +44,6 @@ public class YahooApiClient {
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("No result found"));
 
-        System.out.println("Result found");
-
         int[] timestamps = Arrays.stream(result.timestamp()).mapToInt(Integer::intValue).toArray();
 
         // sometimes null values are present, assign them to the previous value (or open price if first value is null)

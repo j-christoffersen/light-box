@@ -13,10 +13,11 @@ public class RaspberryPiLedMatrix implements LedMatrix {
         RGBLedMatrixOptions options = new RGBLedMatrixOptions();
         options.rows = 32;
         options.cols = 64;
-        // options.disable_hardware_pulsing = true;
+        // options.brightness = 50;
+        // options.disable_hardware_pulsing = true; // allows you to run without sudo, but makes image worse
 
         RGBLedRuntimeOptions rtOptions = new RGBLedRuntimeOptions();
-        rtOptions.gpio_slowdown = 2;
+        rtOptions.gpio_slowdown = 4;
         rtOptions.drop_priv_user = "jackson";
         rtOptions.drop_priv_group = "jackson";
 

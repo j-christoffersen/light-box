@@ -9,6 +9,10 @@
     - try later
     - use postman CLI?
     - proxy to a cloud function? Running chromium, if needed?
+- Adjust brightness while running
+    - Daemon reads from settings file and adjusts
+- Optimization: use led_canvas_set_pixels instead of set_pixel
+- Optimization: use limit_refresh_rate_hz
 
 Bugs:
 

@@ -29,8 +29,6 @@ public class ParsedBdf {
         try {
             List<String> allLines;
             InputStream is = ParsedBdf.class.getResourceAsStream(filePath);
-            System.out.println("input stream: " + (is != null));
-            System.out.println("filePath: " + filePath);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             allLines = reader.lines().collect(Collectors.toList());
 
