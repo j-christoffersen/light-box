@@ -1,5 +1,7 @@
 package dev.jchristoffersen.lightbox.scenes.transitions;
 
+import java.util.Arrays;
+
 import dev.jchristoffersen.lightbox.constants.Constants;
 import dev.jchristoffersen.lightbox.scene.Scene;
 

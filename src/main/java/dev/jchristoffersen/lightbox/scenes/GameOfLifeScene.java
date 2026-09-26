@@ -1,11 +1,9 @@
 package dev.jchristoffersen.lightbox.scenes;
 
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 import dev.jchristoffersen.lightbox.constants.Constants;
 import dev.jchristoffersen.lightbox.render.FrameBuffer;
-import dev.jchristoffersen.lightbox.scene.Scene;
 import dev.jchristoffersen.lightbox.scene.SceneResult;
 import dev.jchristoffersen.lightbox.scene.SlowScene;
 

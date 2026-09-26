@@ -12,6 +12,7 @@ public class PlasmaScene implements Scene {
     private double[] alpha;
     private double[] beta;
     private int t;
+    private FrameBuffer frameBuffer;
 
     public PlasmaScene() {
         // Initialize scene with random coefficients and phase values
@@ -45,7 +46,7 @@ public class PlasmaScene implements Scene {
     }
 
     public SceneResult getNextFrame() {
-        FrameBuffer frameBuffer = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
+        frameBuffer = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {
                 int[] pixel = getPlasmaPixel(x, y, t);

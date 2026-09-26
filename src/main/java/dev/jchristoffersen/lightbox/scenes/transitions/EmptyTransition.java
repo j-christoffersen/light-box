@@ -1,5 +1,6 @@
 package dev.jchristoffersen.lightbox.scenes.transitions;
 
+import dev.jchristoffersen.lightbox.render.FrameBuffer;
 import dev.jchristoffersen.lightbox.scene.Scene;
 import dev.jchristoffersen.lightbox.scene.SceneResult;
 import dev.jchristoffersen.lightbox.scene.Transition;

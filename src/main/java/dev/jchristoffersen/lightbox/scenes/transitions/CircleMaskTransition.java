@@ -14,7 +14,9 @@ public class CircleMaskTransition extends MaskTransition {
 
         for (int y = 0; y < Constants.HEIGHT; y++) {
             for (int x = 0; x < Constants.WIDTH; x++) {
-                mask[y][x] = Math.sqrt(Math.pow(x - Constants.WIDTH / 2, 2) + Math.pow(y - Constants.HEIGHT / 2, 2)) <= progress;
+                int dx = x - Constants.WIDTH / 2;
+                int dy = y - Constants.HEIGHT / 2;
+                mask[y][x] = Math.sqrt(dx * dx + dy * dy) <= progress - 0.5;
             }
         }
 

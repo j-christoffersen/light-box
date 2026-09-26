@@ -28,10 +28,10 @@ public class Local {
             // () -> new ClockScene(),
             // () -> new StockScene("PYPL")
         ), List.of(
-            (oldScene, newScene) -> new WipeTransition(oldScene, newScene),
+            (oldScene, newScene) -> new CircleMaskTransition(oldScene, newScene),
             (oldScene, newScene) -> new BarsTransition(oldScene, newScene),
-            (oldScene, newScene) -> new CircleMaskTransition(oldScene, newScene)
-        ), 60 * 15); // 15 seconds per scene
+            (oldScene, newScene) -> new WipeTransition(oldScene, newScene)
+        ), 60 * 8); // 15 seconds per scene
         LedMatrix ledMatrix = new WebServerMatrix();
         RenderLoop renderLoop = new RenderLoop(sceneManager, ledMatrix);
         renderLoop.start();

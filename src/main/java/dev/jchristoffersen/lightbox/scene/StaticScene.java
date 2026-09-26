@@ -4,14 +4,15 @@ import dev.jchristoffersen.lightbox.render.FrameBuffer;
 
 public abstract class StaticScene implements Scene {
     private boolean rendered = false;
+    private FrameBuffer buffer;
     public SceneResult getNextFrame() {
         if (!rendered) {
-            FrameBuffer buffer = renderOnce();
+            buffer = renderOnce();
             rendered = true;
             return SceneResult.updated(buffer);
         }
 
-        return SceneResult.noUpdate();
+        return SceneResult.noUpdate(buffer);
     }
 
     protected abstract FrameBuffer renderOnce();

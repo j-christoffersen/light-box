@@ -6,14 +6,17 @@ import dev.jchristoffersen.lightbox.render.FrameBuffer;
 
 public sealed interface SceneResult {
     FrameBuffer frameBuffer();
-    SceneResult NO_UPDATE = new NoUpdate();
-    static SceneResult noUpdate() { return NO_UPDATE; }
+    static SceneResult noUpdate(FrameBuffer buffer) { return new NoUpdate(buffer); }
     static SceneResult updated(FrameBuffer buffer) { return new Updated(buffer); }
     static SceneResult done(FrameBuffer buffer, Scene nextScene) { return new Done(buffer, nextScene); }
 
-    record NoUpdate() implements SceneResult {
+    record NoUpdate(FrameBuffer buffer) implements SceneResult {
+        public NoUpdate {
+            Objects.requireNonNull(buffer, "buffer");
+        }
+
         public FrameBuffer frameBuffer() {
-            return null;
+            return buffer;
         }
     }
     record Updated(FrameBuffer buffer) implements SceneResult {

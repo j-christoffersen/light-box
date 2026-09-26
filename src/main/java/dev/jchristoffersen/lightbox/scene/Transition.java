@@ -11,7 +11,5 @@ public abstract class Transition implements Scene {
         this.newScene = Objects.requireNonNull(newScene, "newScene");
     }
 
-    public SceneResult getNextFrame() {
-        return SceneResult.noUpdate();
-    }
+    public abstract SceneResult getNextFrame();
 }
