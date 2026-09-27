@@ -42,7 +42,7 @@ public final class FrameBuffer {
 
     public int getPixelInt(int x, int y) {
         int idx = (y * width + x) * 3;
-        return (pixels[idx] << 16) | (pixels[idx + 1] << 8) | pixels[idx + 2];
+        return (pixels[idx] & 0xFF) << 16 | (pixels[idx + 1] & 0xFF) << 8 | pixels[idx + 2] & 0xFF;
     }
 
     public void clear() {

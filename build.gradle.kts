@@ -13,6 +13,18 @@ dependencies {
     implementation("com.google.guava:guava:33.3.1-jre")
     implementation("com.socketio4j:netty-socketio-core:4.0.1")
     implementation("net.java.dev.jna:jna:5.14.0")
+
+    testImplementation(platform("org.junit:junit-bom:5.13.4"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }
 
 application {
