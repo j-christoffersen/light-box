@@ -78,25 +78,14 @@ class FrameBufferTest {
         }
     }
 
-    @Test
-    void getPixelIntRoundTripsLowChannelValues() {
-        buffer.setPixel(0, 0, 0x102030);
-
-        assertEquals(0x102030, buffer.getPixelInt(0, 0));
-    }
-
-    /**
-     * Channel values >= 128 are stored as negative bytes. getPixelInt must mask
-     * each channel with 0xFF, or sign extension corrupts the higher channels.
-     */
     @ParameterizedTest(name = "0x{0}")
-    @ValueSource(strings = { "FF0000", "00FF00", "0000FF", "808080", "FFFFFF", "10FF10" })
-    void getPixelIntRoundTripsHighChannelValues(String hex) {
+    @ValueSource(strings = { "102030", "FF0000", "00FF00", "0000FF", "808080", "FFFFFF", "10FF10" })
+    void getPixelInt(String hex) {
         int rgb = Integer.parseInt(hex, 16);
         buffer.setPixel(0, 0, rgb);
-
-        assertEquals(rgb, buffer.getPixelInt(0, 0),
-            () -> String.format("expected 0x%06X but was 0x%08X", rgb, buffer.getPixelInt(0, 0)));
+        int actual = buffer.getPixelInt(0, 0);
+        assertEquals(rgb, actual,
+            () -> String.format("expected 0x%06X but was 0x%08X", rgb, actual));
     }
 
     @Test
