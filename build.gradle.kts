@@ -33,31 +33,9 @@ tasks.register<Exec>("deploy") {
     commandLine("rsync", "-avz", "./build/install/light-box/", "lightbox:~/code/light-box-build")
 }
 
-// TODO use sudo
-// tasks.register<Exec>("runPi") {
-//     commandLine("ssh", "lightbox", "\"ls && cd ~/code/light-box-build && ls && ./bin/light-box\"")
-// }
+// TODO run remotely
 
-tasks.register<Exec>("deployLibs") {
-    commandLine("rsync", "-avz", "build/install/light-box/lib/", "lightbox:~/code/light-box-sync/libs/")
-}
-tasks.register<Exec>("deployClasses") {
-    commandLine("rsync", "-avz", "--delete", "build/classes/java/main/", "lightbox:~/code/light-box-sync/main/")
-}
-tasks.register<Exec>("deployResources") {
-    commandLine("rsync", "-avz", "--delete", "src/main/resources/", "lightbox:~/code/light-box-sync/resources/")
-}
-tasks.register<Exec>("deployFull") {
-    dependsOn("compileJava", "deployLibs", "deployClasses", "deployResources")
-}
-
-// TODO use sudo
-// tasks.register<Exec>("runPiFull") {
-//     commandLine("ssh", "lightbox", "\"cd /home/jackson/code/light-box-sync & && ./bin/light-box\"")
-// }
-
-// TOOLS
-
+// DEV TOOLS
 tasks.register<JavaExec>("runLocal") {
     group = "application"
     description = "Executes the Local.java entrypoint file."

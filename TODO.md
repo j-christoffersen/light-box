@@ -1,3 +1,4 @@
+- README gif
 - Fix brightness and ghosting
 - Safe power supply
     - Standoffs, fuse, heat shirk, secure with glue gun or command strips. Electrical tape between hat and pi. Watch exposed wires.
@@ -13,6 +14,9 @@
     - Daemon reads from settings file and adjusts
 - Optimization: use led_canvas_set_pixels instead of set_pixel
 - Optimization: use limit_refresh_rate_hz
+- Fix rPi wifi disconnects
+- Other kernel optimizations
+- Use headless
 
 Bugs:
 
