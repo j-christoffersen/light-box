@@ -1,0 +1,48 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "PYPL",
+          "exchangeTimezoneName": "America/New_York",
+          "regularMarketTime": 1790343240,
+          "regularMarketPrice": 52.54,
+          "chartPreviousClose": 52.6,
+          "previousClose": 52.6,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "EDT",
+              "end": 1790343000,
+              "start": 1790323200,
+              "gmtoffset": -14400
+            },
+            "regular": {
+              "timezone": "EDT",
+              "end": 1790366400,
+              "start": 1790343000,
+              "gmtoffset": -14400
+            },
+            "post": {
+              "timezone": "EDT",
+              "end": 1790380800,
+              "start": 1790366400,
+              "gmtoffset": -14400
+            }
+          },
+          "dataGranularity": "1m",
+          "range": "1d"
+        },
+        "timestamp": [1790343000, 1790343060, 1790343120, 1790343180, 1790343240, 1790343300],
+        "indicators": {
+          "quote": [
+            {
+              "close": [null, 52.72, 52.69, null, 52.54, null]
+            }
+]
+        }
+      }
+],
+    "error": null
+  }
+}

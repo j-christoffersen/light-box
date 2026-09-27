@@ -22,18 +22,19 @@ public class StockScene extends StaticScene {
         public static final int darkRed = 0x660000;
         public static final int darkGreen = 0x006600;
     }
-    private String ticker;
+    private final String ticker;
+    private final YahooApiClient yahooApiClient;
     private YahooApiClient.IntradayData intradayData;
     private ParsedBdf parsedBdf;
 
-    public StockScene(String ticker) {
-        this.ticker = ticker;
+    public StockScene(String ticker, YahooApiClient yahooApiClient) {
+        this.ticker = Objects.requireNonNull(ticker, "ticker");
+        this.yahooApiClient = Objects.requireNonNull(yahooApiClient, "yahooApiClient");
     }
     
     public CompletableFuture<Void> prep() {
         return CompletableFuture.runAsync(() -> {
             // fetch stock info
-            YahooApiClient yahooApiClient = new YahooApiClient();
             YahooApiClient.IntradayData intradayData = yahooApiClient.getIntradayData(ticker);
             this.intradayData = intradayData;
             this.parsedBdf = ParsedBdf.parse("/fonts/5x8.bdf");

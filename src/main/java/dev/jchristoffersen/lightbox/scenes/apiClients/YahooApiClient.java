@@ -6,14 +6,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Objects;
 
 import lombok.SneakyThrows;
 import com.google.gson.Gson;
 
 public class YahooApiClient {
-    
-    public YahooApiClient() {
+    private static final Gson GSON = new Gson();
 
+    private final HttpClient httpClient;
+
+    public YahooApiClient(HttpClient httpClient) {
+        this.httpClient = Objects.requireNonNull(httpClient, "httpClient");
     }
 
     record ChartData(Chart chart) {}
@@ -34,10 +38,13 @@ public class YahooApiClient {
             .GET()
             .build();
 
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        Gson gson = new Gson();
-        ChartData intradayData = gson.fromJson(response.body(), ChartData.class);
+        return parseIntradayData(response.body(), ticker);
+    }
+
+    static IntradayData parseIntradayData(String json, String ticker) {
+        ChartData intradayData = GSON.fromJson(json, ChartData.class);
 
         Result result = Arrays.stream(intradayData.chart().result())
             .filter(r -> r.meta().symbol().equals(ticker))

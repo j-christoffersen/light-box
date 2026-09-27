@@ -1,6 +1,8 @@
 package dev.jchristoffersen.lightbox;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -10,6 +12,7 @@ import dev.jchristoffersen.lightbox.scenes.ClockScene;
 import dev.jchristoffersen.lightbox.scenes.GameOfLifeScene;
 import dev.jchristoffersen.lightbox.scenes.PlasmaScene;
 import dev.jchristoffersen.lightbox.scenes.StockScene;
+import dev.jchristoffersen.lightbox.scenes.apiClients.YahooApiClient;
 import dev.jchristoffersen.lightbox.scenes.SurfScene;
 import dev.jchristoffersen.lightbox.scenes.transitions.BarsTransition;
 import dev.jchristoffersen.lightbox.scenes.transitions.CircleMaskTransition;
@@ -22,12 +25,17 @@ import dev.jchristoffersen.lightbox.core.SceneManager;
 
 public class Local {
     public static void main(String[] args) throws IOException {
+        HttpClient httpClient = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(5))
+            .build();
+        YahooApiClient yahooApiClient = new YahooApiClient(httpClient);
+
         SceneManager sceneManager = new SceneManager(List.<Supplier<Scene>>of(
             () -> new GameOfLifeScene(),
             () -> new PlasmaScene()
             // () -> new SurfScene("El Porto"),
             // () -> new ClockScene(),
-            // () -> new StockScene("PYPL")
+            // () -> new StockScene("PYPL", yahooApiClient)
         ), List.of(
             (oldScene, newScene) -> new FadeTransition(oldScene, newScene),
             (oldScene, newScene) -> new CircleMaskTransition(oldScene, newScene),
