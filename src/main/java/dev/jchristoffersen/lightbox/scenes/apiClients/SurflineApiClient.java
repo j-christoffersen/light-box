@@ -6,16 +6,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Clock;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
 
 public class SurflineApiClient {
-    public SurflineApiClient() {
-        
+    private final Clock clock;
+
+    public SurflineApiClient(Clock clock) {
+        this.clock = Objects.requireNonNull(clock, "clock");
     }
 
     record SurflineSurfResponse(SurflineSurfData data) {}
@@ -52,14 +56,15 @@ public class SurflineApiClient {
         SurflineWindResponse windResponse = gson.fromJson(windData, SurflineWindResponse.class);
         SurflineTidesResponse tideResponse = gson.fromJson(tideData, SurflineTidesResponse.class);
 
-        TidesEntry currentTides = getLatestEntry(tideResponse.data().tides());
+        long nowSeconds = clock.instant().getEpochSecond();
+        TidesEntry currentTides = getLatestEntry(tideResponse.data().tides(), nowSeconds);
         TidesEntry[] tides = tideResponse.data().tides();
 
         double latestTideHeight = 0;
         double currentTideHeight = 0;
         Boolean isIncreasing = null;
         for (int i = 0; i < tides.length; i++) {
-            if (i == 0 || tides[i].timestamp() < System.currentTimeMillis() / 1000) {
+            if (i == 0 || tides[i].timestamp() < nowSeconds) {
                 // iterate until we find current tide height
                 currentTideHeight = tides[i].height();
             } else if (isIncreasing == null) {
@@ -80,9 +85,9 @@ public class SurflineApiClient {
         }
 
         return new SurflineData(
-            getLatestEntry(surfResponse.data().surf()),
-            getLatestEntry(ratingResponse.data().rating()).rating(),
-            getLatestEntry(windResponse.data().wind()),
+            getLatestEntry(surfResponse.data().surf(), nowSeconds),
+            getLatestEntry(ratingResponse.data().rating(), nowSeconds).rating(),
+            getLatestEntry(windResponse.data().wind(), nowSeconds),
             new Tides(currentTides.height(), latestTideHeight, isIncreasing)
         );
     }
@@ -90,8 +95,8 @@ public class SurflineApiClient {
     interface SurflineEntry {
         int timestamp();
     }
-    private <T extends SurflineEntry> T getLatestEntry(T[] entries) {
-        return Arrays.stream(entries).filter(entry -> entry.timestamp() < System.currentTimeMillis() / 1000)
+    private static <T extends SurflineEntry> T getLatestEntry(T[] entries, long nowSeconds) {
+        return Arrays.stream(entries).filter(entry -> entry.timestamp() < nowSeconds)
         .max(Comparator.comparingInt(SurflineEntry::timestamp))
         .orElseThrow();
     }

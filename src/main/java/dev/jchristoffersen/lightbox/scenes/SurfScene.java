@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import javax.imageio.ImageIO;
@@ -18,14 +19,14 @@ public class SurfScene extends StaticScene {
         "El Porto", "5a25e409aa1aea001b27be39"
     );
 
-    private String spotName;
-    private SurflineApiClient surflineApiClient;
+    private final String spotName;
+    private final SurflineApiClient surflineApiClient;
     private SurflineApiClient.SurflineData surflineData;
     private BufferedImage waveBmp;
 
-    public SurfScene(String spotName) {
-        this.spotName = spotName;
-        this.surflineApiClient = new SurflineApiClient();
+    public SurfScene(String spotName, SurflineApiClient surflineApiClient) {
+        this.spotName = Objects.requireNonNull(spotName, "spotName");
+        this.surflineApiClient = Objects.requireNonNull(surflineApiClient, "surflineApiClient");
     }
     
     public CompletableFuture<Void> prep() {

@@ -1,7 +1,9 @@
 package dev.jchristoffersen.lightbox.scenes;
 
-import java.time.LocalDateTime;
+import java.time.Clock;
+import java.time.LocalTime;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import dev.jchristoffersen.lightbox.constants.Constants;
@@ -52,7 +54,12 @@ public class ClockScene extends StaticScene {
         Map.entry(55, "FIVE TILL")
     );
 
+    private final Clock clock;
     private ParsedBdf parsedBdf;
+
+    public ClockScene(Clock clock) {
+        this.clock = Objects.requireNonNull(clock, "clock");
+    }
 
     public CompletableFuture<Void> prep() {
         return CompletableFuture.runAsync(() -> {
@@ -63,8 +70,9 @@ public class ClockScene extends StaticScene {
     public FrameBuffer renderOnce() {
         FrameBuffer frameBuffer = new FrameBuffer(Constants.WIDTH, Constants.HEIGHT);
 
-        int hours = LocalDateTime.now().getHour();
-        int minutes = LocalDateTime.now().getMinute();
+        LocalTime now = LocalTime.now(clock);
+        int hours = now.getHour();
+        int minutes = now.getMinute();
         int minutesRounded = ((int) Math.round((double) minutes / 5) * 5) % 60;
 
         // render up to three words, each in their own row

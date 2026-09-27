@@ -5,7 +5,9 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
 public interface LedMatrixNative extends Library {
-    public static final LedMatrixNative INSTANCE = Native.load("/home/jackson/code/rpi-rgb-led-matrix/lib/librgbmatrix.so.1", LedMatrixNative.class); // TODO make dynamic
+    static LedMatrixNative load(String libraryPath) {
+        return Native.load(libraryPath, LedMatrixNative.class);
+    }
 
     public Pointer led_matrix_create(int rows, int chained, int parallel);
     public Pointer led_matrix_create_from_options_and_rt_options(RGBLedMatrixOptions options, RGBLedRuntimeOptions rtOptions);

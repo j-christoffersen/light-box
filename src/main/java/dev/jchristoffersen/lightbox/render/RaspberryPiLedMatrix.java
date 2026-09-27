@@ -1,44 +1,50 @@
 package dev.jchristoffersen.lightbox.render;
 
+import java.util.Objects;
+
 import com.sun.jna.Pointer;
 
-import dev.jchristoffersen.lightbox.constants.Constants;
-
 public class RaspberryPiLedMatrix implements LedMatrix {
-    private final Pointer ledMatrixNative;
+    public record Config(int rows, int cols, int gpioSlowdown, String dropPrivUser, String dropPrivGroup) {}
+
+    private final LedMatrixNative ledMatrixNative;
+    private final Config config;
+    private final Pointer matrix;
     private Pointer offscreenCanvas;
 
+    public RaspberryPiLedMatrix(LedMatrixNative ledMatrixNative, Config config) {
+        this.ledMatrixNative = Objects.requireNonNull(ledMatrixNative, "ledMatrixNative");
+        this.config = Objects.requireNonNull(config, "config");
 
-    public RaspberryPiLedMatrix() {
         RGBLedMatrixOptions options = new RGBLedMatrixOptions();
-        options.rows = 32;
-        options.cols = 64;
+        options.rows = config.rows();
+        options.cols = config.cols();
         // options.brightness = 50;
         // options.disable_hardware_pulsing = true; // allows you to run without sudo, but makes image worse
 
         RGBLedRuntimeOptions rtOptions = new RGBLedRuntimeOptions();
-        rtOptions.gpio_slowdown = 4;
-        rtOptions.drop_priv_user = "jackson";
-        rtOptions.drop_priv_group = "jackson";
+        rtOptions.gpio_slowdown = config.gpioSlowdown();
+        rtOptions.drop_priv_user = config.dropPrivUser();
+        rtOptions.drop_priv_group = config.dropPrivGroup();
 
-        ledMatrixNative = LedMatrixNative.INSTANCE.led_matrix_create_from_options_and_rt_options(options, rtOptions);
-        offscreenCanvas = LedMatrixNative.INSTANCE.led_matrix_get_canvas(ledMatrixNative);
+        matrix = ledMatrixNative.led_matrix_create_from_options_and_rt_options(options, rtOptions);
+        offscreenCanvas = ledMatrixNative.led_matrix_get_canvas(matrix);
     }
 
     public void present(FrameBuffer buffer) {
-        for (int y = 0; y < Constants.HEIGHT; y++) {
-            for (int x = 0; x < Constants.WIDTH; x++) {
-                LedMatrixNative.INSTANCE.led_canvas_set_pixel(
+        for (int y = 0; y < config.rows(); y++) {
+            for (int x = 0; x < config.cols(); x++) {
+                ledMatrixNative.led_canvas_set_pixel(
                     offscreenCanvas,
                     x,
                     y,
-                    buffer.pixels[3 * (y * Constants.WIDTH + x)],
-                    buffer.pixels[3 * (y * Constants.WIDTH + x) + 1],
-                    buffer.pixels[3 * (y * Constants.WIDTH + x) + 2]
+                    buffer.pixels[3 * (y * config.cols() + x)],
+                    buffer.pixels[3 * (y * config.cols() + x) + 1],
+                    buffer.pixels[3 * (y * config.cols() + x) + 2]
                 );
             }
         }
     
-        offscreenCanvas = LedMatrixNative.INSTANCE.led_matrix_swap_on_vsync(ledMatrixNative, offscreenCanvas);
+        offscreenCanvas = ledMatrixNative.led_matrix_swap_on_vsync(matrix, offscreenCanvas);
     }
 }
