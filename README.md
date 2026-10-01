@@ -3,6 +3,7 @@
 ![LightBox Game of Life](docs/demo.gif)
 
 Raspberry Pi based Pixel-art style display that cycles through custom apps.
+Read about the entire project [on my substack](https://jackson453604.substack.com/p/why-spend-200-on-a-tydbyt-when-i).
 
 Maybe inspired by [TYDBYT](https://tidbyt.com/?srsltid=AU7gw4WfCfyjbUMqWveqrx8zOHccvySlT2Cnz3E5brFxxSw6OB7yuwQ5)
 
